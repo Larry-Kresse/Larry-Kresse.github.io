@@ -181,7 +181,7 @@ input, select, textarea {
 		}
 
 	div#wrapper::before {
-		border-radius: 0px 10vmin 0px 0px;
+		border-radius: 0px 10vmin 10vmin 0px;
 	}
 
 	a {
