@@ -93,31 +93,15 @@
 				<!-- Section first steps-->
 					<section>
 						<header>
-							<h2>Initial Design</h2>
+							<h2>Hardware Design</h2>
 						</header>
 						<div class="content">
 							<p>The design of this off-grid communicator involved balancing factors across <strong>several disciplines of engineering</strong>. The 3D printed case needed to be robust and easily manufacturable. The electronic hardware required a custom PCB to connect from the myriad of IO devices, in a small and portable form-factor. The industrial design should be intuitive for new users, and should't require much explaining or manual-reading.   </p>
-							<!-- Section -->
-								<section>
-									<header>
-										<h3>Mechanical Design</h3>
-										<p class="gold">A clamshell of 3D printed plastic (shown as gray) encased the PCB (the purple form) and provided some internal protection to the PCB and 18650-sized lithium battery (green cylinder).  </p>
-										
-										<p class="gold">A "shield" printed in an accent color (red in this case) covered the lithium battery, the GPS antenna, and the power switch. This also helped hold the clamshell together. To save assembly costs, a single screw connects the two halves of the "shield" together.  </p>
-										
-										<p class="gold">The final design is rather rigid and robust. A translucent ring surrounds the screen bezel, and allows LEDs mounted on the PCB in a compass ring to be viewed through the plastic enclosure. </p>
-									</header>
-									<div class="content">
-										<div class="gallery">
-											<a id="dynamicProjectImage" href="images/beacon/CAD_beacon_exploded.png" class="landscape"><img src="images/beacon/CAD_beacon_exploded.png" alt="" /></a>
-											
-										</div>
-									</div>
-								</section>
+							
 								<!-- Section -->
 								<section>
 									<header>
-										<h3>Hardware Design</h3>
+										<h3>Electronics Design</h3>
 										<p class="gold"> The electrical hardware design comprises a mainboard that connects breakout boards, switches, and indicators to an Espressif ESP-32 microcontroller. The board also includes a battery charger and a DC-DC converter.</p>
 										
 										<p class="gold"> The first schematic contains the ESP 32 and support circuitry. I used a tag-connect TC-2030 for the serial port. The USB C port is only used for charging. As the original ESP32 lacks native USB support, omitting USB serial saves a USB-UART bridge chip, reducing production costs. Finally, a magnetic buzzer provides an indication that a message has been received.</p>
@@ -145,13 +129,33 @@
 										<h3>Board Layout</h3>
 										<p class="gold">The PCB's shape was chosen to be approximately rectangular with a cutout in the top right where the lithium battery would be installed. To save on development time for this first prototype, several breakout boards were used for sensors in this project. </p>
 										
-										<p class="gold">The top of the PCB hosts the ESP32 microcontroller, a level shifter IC 
+										<p class="gold">The top of the PCB hosts the ESP32 microcontroller, a level shifter IC, OLED screen breakout, battery charging circuit, DC-DC converter, and all SMT components. The SMT components in this board were populated by JLCPCB's assembly service.</p> 
+										
+										<p class="gold">On the bottom of the PCBA, breakout boards for the compass IC, GPS receiver, and LoRa modem can be found. Having breakout boards connected via 2.54mm headers on both sides of the PCBA made the entire assembly approximately 15mm thick.</p> 
+									</header>
+									<div class="content">
+										<div class="gallery">
+											<a id="dynamicProjectImage" href="images/beacon/V1_PCB_bothsides.png" class="landscape"><img src="images/beacon/V1_PCB_bothsides.png" alt="" /></a>
+											
+										</div>
+									</div>
+								</section>
+
+								<!-- Section -->
+								<section>
+									<header>
+										<h3>Mechanical Design</h3>
+										<p class="gold">A clamshell of 3D printed plastic (shown as gray) encased the PCB (the purple form) and provided some internal protection to the PCB and 18650-sized lithium battery (green cylinder).  </p>
+										
+										<p class="gold">A "shield" printed in an accent color (red in this case) covered the lithium battery, the GPS antenna, and the power switch. This also helped hold the clamshell together. To save assembly costs, a single screw connects the two halves of the "shield" together.  </p>
 										
 										<p class="gold">The final design is rather rigid and robust. A translucent ring surrounds the screen bezel, and allows LEDs mounted on the PCB in a compass ring to be viewed through the plastic enclosure. </p>
 									</header>
 									<div class="content">
 										<div class="gallery">
-											<a id="dynamicProjectImage" href="images/beacon/V1_PCB_bothsides.png" class="landscape"><img src="images/beacon/V1_PCB_bothsides.png" alt="" /></a>
+											<a id="dynamicProjectImage" href="images/beacon/CAD_beacon_overview.png" class="landscape"><img src="images/beacon/CAD_beacon_overview.png" alt="" /></a>
+
+											<a id="dynamicProjectImage" href="images/beacon/CAD_beacon_exploded.png" class="landscape"><img src="images/beacon/CAD_beacon_exploded.png" alt="" /></a>
 											
 										</div>
 									</div>
@@ -165,44 +169,29 @@
 					<!-- Section PCB Design steps-->
 					<section>
 						<header>
-							<h2>Embedded Systems and Physical Design</h2>
+							<h2>Board Bring-up</h2>
 						</header>
 						<div class="content">
-							<p> <strong>With the communication protocol decoded</strong>, the next step is to design a custom embedded system that can speak the same protocol and control the power supply.  </p>
-							
-							<p> It is also necessary to design the User Interface and various mechanical components needed to house the electronics. </p>
-							
-							<p> The project requires attention to design to ensure the new UI upgrade is pleasant to operate. </p>
-							
+							<p> <strong>With the hardware designed</strong>, the next step is board bring up. This is an important part of hardware development and involves testing the prototype hardware to ensure it functions as intended. </p>
+																					
 							<p> <small> (Hint: click on the thumbnails to view the full image) </small>  </p>
 							<!-- Section -->
 								<section>
 									<header>
-										<h3>Schematic capture</h3>
-										<p class="gold">The electronics for this project were designed in JLCPCB's EasyEDA software. The physical formfactor was prototyped and designed in Fusion 360.</p>
-										
-										<p class="gold">The embedded system design for this project consists of four major components. The first is the CPU, which controls the aftermarket UI upgrade board. The project is based on the ESP32 microcontroller. Because it is a 3.3V device, level shifters interface it with the 5V logic of the display and RS-232 driver ICs.  </p>
-										
-										<p class="gold">The power system of the project consists of two DC-DC converters. These step the input 24VDC power rail to the needed voltages, 12V (for fans) and 5V (for ICs, OLED display). The ESP32 is powered by a 3.3V LDO regulator. </p>
-										
-										<p class="gold">The IO sheet contains the RS-232 circuit, OLED display header, and relay drivers for controlling the fan, 4-wire sense, and PSU power relays. </p>
-										
-										<p class="gold">Finally, the UI board contains the buttons used to control the power supply. The author selected Kalih Choc V1 mechanical switches to improve the tactile experience of the product. </p>
-										
-										<h3>Mechanical and Industrial Design</h3>
-										
-										<p class="gold">The physical design rearranged the buttons from the original power supply to enhance usability, while maintaining access to all features of the original power supply.   </p>
+										<h3>Bring-up</h3>
+										<p class="gold"> Bringing-up a board involves a variety of firmware, software, and electrical engineering experience. Embedded code must be written to interface with sensors and actuators on the board. Power systems must be stress tested to ensure they can perform in adverse conditions. Often, test equipment like Oscilloscopes and Spectrum Analyzers are needed to debug electrical issues with the prototype. </p>
 
-										<p class="gold"> It is important to consider the mechanical and usability aspects of any embedded system design. I enjoy creating projects at the intersection between engineering and industrial design to create the best product possible. </p>
+										
+										<p class="gold">This project required a few board runs to get working correctly. Due to the amount of IO devices on the board, the ESP32's strapping pins were needed. This resulted in some challenges as I determined how ensure they were in the right state at boot, but still be usable for functionality when the device was in use. </p>
+										
+										<p class="gold"> The top image shows the indicator LEDs being tested with a full-green test pattern. An Adafruit library and test pattern was used to test the OLED display. The bottom image shows a fully-assembled PCBA. This was the hardware that made it out of the board bring-up stage to prototype production. </p>
+										
 									</header>
 									<div class="content">
 										<div class="gallery">
-											<a id="dynamicProjectImage" href="images/psu_ui/CPU.png" ><img src="images/psu_ui/CPU_thumb.png" alt="" /></a>
-											<a id="dynamicProjectImage" href="images/psu_ui/Power.png" ><img src="images/psu_ui/Power_thumbn.png" alt="" /></a>
-											<a id="dynamicProjectImage" href="images/psu_ui/IO.png" ><img src="images/psu_ui/IO_thumb.png" alt="" /></a>
-											<a id="dynamicProjectImage" href="images/psu_ui/UI.png" ><img src="images/psu_ui/UI_thumb.png" alt="" /></a>
-											<a id="dynamicProjectImage" href="images/psu_ui/CAD_iso.png" class="landscape" ><img src="images/psu_ui/CAD_iso.png" alt="" /></a>
-											<a id="dynamicProjectImage" href="images/psu_ui/CAD_exploded.png" class="landscape" ><img src="images/psu_ui/CAD_exploded.png" alt="exploded view of aftermarket UI upgrade" /></a>
+											<a id="dynamicProjectImage" href="images/beacon/early_bring_up.jpg" class="landscape" ><img src="images/beacon/early_bring_up.jpg" alt="" /></a>
+											<a id="dynamicProjectImage" href="images/beacon/beacon_PCBA.jpg" class="landscape"><img src="images/beacon/beacon_PCBA.jpg" alt="" /></a>
+
 										</div>
 									</div>
 								</section>
@@ -216,31 +205,42 @@
 					<!-- Section PCB steps-->
 					<section>
 						<header>
-							<h2>Board Bring-up and Electronic Prototype Assembly</h2>
+							<h2>Prototype Run and User Testing</h2>
 						</header>
 						<div class="content">
-							<p>With the design work done, now it is time to <strong>assemble and test the prototype</strong>. The prototype consists of two PCBAs and associated software. The PCB fab and SMT assembly were contracted to JLCPCB. I installed all through-hole components (keys, display, connectors) and wrote test software to control the system.</p>
+							<p>The hardware is working, but now the product itself must be <strong>tested with actual users</strong>. 30 Celestial Navigator prototypes, consisting of functional PCBAs and 3D printed enclosures, were manufactured.</p>
 
+							<p>All 3D printing, through-hole soldering, and final assembly was done in-house.</p>
 							<!-- Section -->
 								<section>
 									<header>
-										<h3>Board Bring-up</h3>
-										<p class="gold">The testing and bring-up process for this product was fairly straightforward. Only two modifications were needed to get the system working as designed (Accidental use of GPIO 36 and 39 for button input; these pins on the ESP32 don't have internal pull-up resistors). </p>
+										<h3>User Testing</h3>
+										<p class="gold">The Celestial Navigator has cyberpunk styling and a robust 3D-printed case. The first image in this section is an actual picture of one of the 30 prototypes used in user testing.</p>
+
+										<p class="gold">The 30 prototypes were deployed at a camping event. Users were given a brief crash course on the UI and then released into the wild wielding their communicator. </p>
 										
-										<p class="gold">Because the software application was simple, the Arduino IDE was used to develop the firmware and program the ESP32.</p>
+										<p class="gold">The event lasted 4 days, and consisted of camping, hiking, and climbing. Weather included rain and shine, and temperatures ranging from 40F to 80F. Most people walked between 2 and 10 miles per day, and had the Celestial Navigator on for 8 hours each day.</p>
 										
-										<p class="gold">There are individually-addressable RGB LEDs under each key. Here, the "OPERATE" key is highlighted in blue to show thje user that the output of the PSU is on. </p>
+										<p class="gold">Multiple mounting options were provided, from wrist mount to caribiner clip. Most users opted for the caribiner clip, hanging the device from a backpack strap. In use, the user could rotate the device up to view the screen. </p>
 										
-										<p class="gold">The last board shown is a simple interconnect PCB that connects the RS232 output of the main PCB to the RJ-45 jack used by the 2304A. </p>
+										<p class="gold">Users praised the UI and tactile experience of using the Navigator, as well as the LED indication and functionality. </p>
 										
-										<p class="gold">During testing, the prototype embedded system <strong class="gold"> sucessfully controlled the Keithley 2304A</strong>, exactly achieving the functionality of the OEM Remote Control module. </p>
+										<p class="gold">The number one problem identified was the Antenna. The rubber duck antenna we used was adjustable, and was free to rotate as the user walked. A monopole antenna radiates in a toroidal pattern, with the peak radiation perpendicular to the axis of the antenna. This means that if our antenna is jostled into an orientation that is not perpendicular to the ground, it won't be as effective. </p>
+
+										<p class="gold">Overall, the Celestial Navigator performed very well on the first test run. No devices failed during operation, and users were pleased with the functionality. Still, I believed we could do better, and immediately started working on <strong class = "gold"><a class="gold" href="beacon_V2.html"> Version 2 of the Celestial Navigator</a></strong></strong>.</p>
 
 									</header>
 									<div class="content">
 										<div class="gallery">
-											<a id="dynamicProjectImage" href="images/psu_ui/bring_up_front.jpg" class="landscape"><img src="images/psu_ui/bring_up_front.jpg" alt="" /></a>
-											<a id="dynamicProjectImage" href="images/psu_ui/pcb_back.jpg" ><img src="images/psu_ui/pcb_back_thumb.jpg" alt="" /></a>
-											<a id="dynamicProjectImage" href="images/psu_ui/pcb_interconnect.jpg" ><img src="images/psu_ui/pcb_interconnect.jpg" alt="" /></a>											
+											<a id="dynamicProjectImage" href="images/beacon/beacon_assembled.jpg" class="landscape"><img src="images/beacon/beacon_assembled.jpg" alt="" /></a>
+											<a id="dynamicProjectImage" href="images/beacon/beacon_worn_on_backpack.png" class="landscape"><img src="images/beacon/beacon_worn_on_backpack.png" alt="" /></a>
+											<a id="dynamicProjectImage" href="images/beacon/radiation_pattern_monopole.png" class="landscape"><img src="images/beacon/radiation_pattern_monopole.png" alt="" /></a>
+
+											<a id="dynamicProjectImage" >
+												<video id="dynamicProjectImage" width="1000" height="500" controls>
+													<source src = "images/beacon/beacon_v1_whitebg.mp4" type="video/mp4">
+												</video>
+											</a>
 										</div>
 									</div>
 								</section>
@@ -250,41 +250,7 @@
 						</div>
 					</section>
 					
-					<!-- Section Case steps-->
-					<section>
-						<header>
-							<h2>Bonus content: project case assembly</h2>
-						</header>
-						<div class="content">
-							<p>I wanted an <strong>excuse to play with a CNC router</strong>. I enjoy thinking about the mechanical and industrial design of electronics projects, including how the project exists as a finished product. Since a finished product requires a bit more than a pile of PCBs, I need to fabricate a case.
 
-							<!-- Section -->
-								<section>
-									<header>
-										<h3>Case construction</h3>
-										<p class="gold">The case was designed in Fusion 360 and routed on a local makerspace's CNC machine. The design language is a bit retro-futuristic, reminiscent of atmoic age control panels. I enjoy this style for bench equipment.</p>
-										
-										<p class="gold">The CNC machine used is a variant of the Joe's CNC. The cutting area was 4' by 4' which was overkill for this application. I ended up fabricating 3 cases. Each case has space for 2 UI boards, meaning I have room for future expansion using this panel form-factor.</p>
-										
-										<p class="gold">A test-fit with the front panel proved that the aftermarket UI assembly will fit into the CNC-routed case. </p>
-										
-										<p class="gold">The black front panel of the system is actually an aluminum PCB with white silkscreen. The layout of the new controls can be seen in the last image. </p>
-										
-									</header>
-									<div class="content">
-										<div class="gallery">
-											<a id="dynamicProjectImage" href="images/psu_ui/case_cnc.jpg" ><img src="images/psu_ui/case_cnc.jpg" alt="" /></a>
-											<a id="dynamicProjectImage" href="images/psu_ui/case_assembly.jpg" ><img src="images/psu_ui/case_assembly.jpg" alt="" /></a>
-											<a id="dynamicProjectImage" href="images/psu_ui/case_testfit.jpg" class="landscape"><img src="images/psu_ui/case_testfit.jpg" alt="" /></a>	
-											<!--a id="dynamicProjectImage" href="images/psu_ui/frontPanel.jpg" class="landscape"><img src="images/psu_ui/frontPanel.jpg" alt="" /></a-->											
-										</div>
-									</div>
-								</section>
-
-					
-
-						</div>
-					</section>
 
 
 
