@@ -103,13 +103,55 @@
 										<h3>Mechanical Design</h3>
 										<p class="gold">A clamshell of 3D printed plastic (shown as gray) encased the PCB (the purple form) and provided some internal protection to the PCB and 18650-sized lithium battery (green cylinder).  </p>
 										
-										<p class="gold">A "shield" printed in an accent color (red in this case) covered the lithium battery, the GPS antenna, and the power switch. This also helped hold the clamshell together. To save assembly costs, a single screw connects the two halves of the accent color cover together.  </p>
+										<p class="gold">A "shield" printed in an accent color (red in this case) covered the lithium battery, the GPS antenna, and the power switch. This also helped hold the clamshell together. To save assembly costs, a single screw connects the two halves of the "shield" together.  </p>
 										
 										<p class="gold">The final design is rather rigid and robust. A translucent ring surrounds the screen bezel, and allows LEDs mounted on the PCB in a compass ring to be viewed through the plastic enclosure. </p>
 									</header>
 									<div class="content">
 										<div class="gallery">
 											<a id="dynamicProjectImage" href="images/beacon/CAD_beacon_exploded.png" class="landscape"><img src="images/beacon/CAD_beacon_exploded.png" alt="" /></a>
+											
+										</div>
+									</div>
+								</section>
+								<!-- Section -->
+								<section>
+									<header>
+										<h3>Hardware Design</h3>
+										<p class="gold"> The electrical hardware design comprises a mainboard that connects breakout boards, switches, and indicators to an Espressif ESP-32 microcontroller. The board also includes a battery charger and a DC-DC converter.</p>
+										
+										<p class="gold"> The first schematic contains the ESP 32 and support circuitry. I used a tag-connect TC-2030 for the serial port. The USB C port is only used for charging. As the original ESP32 lacks native USB support, omitting USB serial saves a USB-UART bridge chip, reducing production costs. Finally, a magnetic buzzer provides an indication that a message has been received.</p>
+										
+										<p class="gold"> The second schematic shows the UI components, consisting of 5x Cherry MX mechanical keyswitches, one quadrature encoder, and supporting components. The ENTER button requires a pull-up resistor because the ESP32's IO34 pin lacks a built-in pull-up.</p>
+
+										<p class="gold"> The third schematic contains the indication LEDs. 30 WS2812B-compatible LEDs provide feedback to the user. Most of these are arranged in a ring around the screen, forming a digital compass. This allows the compass to point in any direction, allowing the user to navigate to the source of a message.</p>
+
+										<p class="gold"> The fourth schematic describes the module and sensor connections of the device. These include a magnetometer (compass), a GPS receiver, a 128x32 pixel OLED screen, and a SX-1276-based LoRa modem. </p>
+
+										<p class="gold"> The final schematic contains the power management circuitry. A TI TPS61088-based boost converter steps the 3.7V lithium battery voltage to the 5V required by the WS2812B LEDs. A pair of P-FETs act as an ideal diode to allow the system to swap between 5V USB power and the onboard battery.</p>
+									</header>
+									<div class="content">
+										<div class="gallery">
+											<a id="dynamicProjectImage" href="images/beacon/Beacon_ESP32.png" class="landscape" ><img src="images/beacon/Beacon_ESP32.png" alt="" /></a>
+											<a id="dynamicProjectImage" href="images/beacon/Beacon_Digital_IO.png" class="landscape" ><img src="images/beacon/Beacon_Digital_IO.png" alt="" /></a>
+											<a id="dynamicProjectImage" href="images/beacon/Beacon_LEDs.png" class="landscape" ><img src="images/beacon/Beacon_LEDs.png" alt="" /></a>
+											<a id="dynamicProjectImage" href="images/beacon/Beacon_Modules.png" class="landscape"><img src="images/beacon/Beacon_Modules.png" alt="" /></a>
+											<a id="dynamicProjectImage" href="images/beacon/Beacon_Power_Core.png" class="landscape" ><img src="images/beacon/Beacon_Power_Core.png" alt="" /></a>										</div>
+									</div>
+								</section>
+								<!-- Section -->
+								<section>
+									<header>
+										<h3>Board Layout</h3>
+										<p class="gold">The PCB's shape was chosen to be approximately rectangular with a cutout in the top right where the lithium battery would be installed. To save on development time for this first prototype, several breakout boards were used for sensors in this project. </p>
+										
+										<p class="gold">The top of the PCB hosts the ESP32 microcontroller, a level shifter IC 
+										
+										<p class="gold">The final design is rather rigid and robust. A translucent ring surrounds the screen bezel, and allows LEDs mounted on the PCB in a compass ring to be viewed through the plastic enclosure. </p>
+									</header>
+									<div class="content">
+										<div class="gallery">
+											<a id="dynamicProjectImage" href="images/beacon/V1_PCB_bothsides.png" class="landscape"><img src="images/beacon/V1_PCB_bothsides.png" alt="" /></a>
 											
 										</div>
 									</div>
