@@ -1,0 +1,627 @@
+<!DOCTYPE HTML>
+<!--
+	Paradigm Shift by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Projects - 2304A UI Upgrade - Larry Kresse</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<meta name="description" content="" />
+		<meta name="keywords" content="" />
+		<link rel="stylesheet" href="../assets/css/main_project.css" />
+		
+		
+			<section>
+						
+						<header>
+							<a href="../index.html" style="margin-left: 25%; "class="  "><strong>Back to Projects</strong></a>
+						</header>
+				
+						
+			</section>
+	</head>
+	<body class="is-preload">
+	<!-- <script>
+        // Define the variable
+        let project = "template";
+
+        // Function to update the href
+        function updateHref() {
+            const images = document.getElementsByClassName('image main');
+			
+			var regex = new RegExp("[^\\/]+$");
+			
+			
+			for (let i = 0; i < images.length; i++) {
+				let curSrc = images[i].src;
+			
+				let rawImgName = regex.exec(curSrc);
+			
+			
+				//check if image is thumbnail or full res, modify path accordingly
+
+			
+				console.log(rawImgName);
+			
+				images[i].src = "../images/projects/"+project+"/"+rawImgName[0];
+			
+				images[i].href = "../images/projects/"+project+"/"+rawImgName[0];
+			}
+        }
+
+        // Update the href when the document is loaded
+        document.addEventListener("DOMContentLoaded", updateHref);
+    </script> -->
+	
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+				<!-- nav -->
+				
+				
+				
+				<!-- Intro -->
+					<section class="intro">
+					
+						<header>
+							
+							<h1>Keithley 2304A UI Upgrade</h1>
+							<p class="gold_always">An aftermarket upgrade for a 30-year old Power Supply <!--a href="https://twitter.com/ajlkn">@ajlkn</a> / <a href="https://html5up.net">HTML5 UP</a></p-->
+							<ul class="actions">
+<!-- 								<li><a href="#first" class="arrow back_arrow"><span class="label">Next</span></a></li>
+ -->							</ul>
+						</header>
+						<div class="content">
+							<span class="image fill" data-position="center"><img src="images/psu_ui/bring_up_front.jpg" alt="" /></span>
+						</div>
+					</section>
+
+				<!-- Section background -->
+					<section id="first">
+						<header>
+							<h2>Background</h2>
+						</header>
+						<div class="content">
+							<p><strong>The Keithley 2304A </strong> is a decent high-speed benchtop power supply. A two-quadrant supply, the unit can output between 0 and 20 volts, source up to 5 amps, and sink up to 3 amps. It is suitable for testing battery-powered communication devices due to its 40uS recovery time after a large load change. They were also made for years, and can be bought for quite cheaply secondhand. The problem? <strong> The UI is borderline unusable. </strong> The buttons are spongy and hard-to-press, and the 90s-era LCD can only be viewed from head-on. Time for an upgrade.</p>
+							<span class="image main"><img src="images/psu_ui/originalUI.jpg" alt="" /></span>
+						</div>
+					</section>
+
+				<!-- Section first steps-->
+					<section>
+						<header>
+							<h2>First Steps</h2>
+						</header>
+						<div class="content">
+							<p><strong>The basic design</strong> chosen takes advantage of a built-in feature of the 2304A: the Remote Display Option. Because the 2304A was intended to be mounted in test racks far from your bench, it could be controlled with a remote UI that plugs into the back panel of the unit. Unfortunately, little information about this Remote Display exists, so reverse-engineering of the system is necessary.  </p>
+
+							<!-- Section -->
+								<section>
+									<header>
+										<h3>Reverse Engineering</h3>
+										<p class="gold">Through tracing the serial port pins from the original UI microcontroller, through a RS-232 IC, and to the power supply's mainboard, I learned what pins to probe to view the communication traffic. </p>
+										
+										<p class="gold">After that, it was as simple as setting the oscilloscope to Serial one-shot trigger. By recording the values transmitted, I determined that each key press results in a character being sent across the RS-232 bus.  </p>
+										
+										<p class="gold">A bit more reverse-engineering revealed that the full text shown on the display (plus a few control characters) is sent after each key press. </p>
+									</header>
+									<div class="content">
+										<div class="gallery">
+											<a id="dynamicProjectImage" href="images/psu_ui/reverse_engineer_rs232.jpg" class="landscape"><img src="images/psu_ui/reverse_engineer_rs232.jpg" alt="" /></a>
+											
+										</div>
+									</div>
+								</section>
+
+					
+
+						</div>
+					</section>
+					
+					<!-- Section PCB Design steps-->
+					<section>
+						<header>
+							<h2>Embedded Systems and Physical Design</h2>
+						</header>
+						<div class="content">
+							<p> <strong>With the communication protocol decoded</strong>, the next step is to design a custom embedded system that can speak the same protocol and control the power supply.  </p>
+							
+							<p> It is also necessary to design the User Interface and various mechanical components needed to house the electronics. </p>
+							
+							<p> The project requires attention to design to ensure the new UI upgrade is pleasant to operate. </p>
+							
+							<p> <small> (Hint: click on the thumbnails to view the full image) </small>  </p>
+							<!-- Section -->
+								<section>
+									<header>
+										<h3>Schematic capture</h3>
+										<p class="gold">The electronics for this project were designed in JLCPCB's EasyEDA software. The physical formfactor was prototyped and designed in Fusion 360.</p>
+										
+										<p class="gold">The embedded system design for this project consists of four major components. The first is the CPU, which controls the aftermarket UI upgrade board. The project is based on the ESP32 microcontroller. Because it is a 3.3V device, level shifters interface it with the 5V logic of the display and RS-232 driver ICs.  </p>
+										
+										<p class="gold">The power system of the project consists of two DC-DC converters. These step the input 24VDC power rail to the needed voltages, 12V (for fans) and 5V (for ICs, OLED display). The ESP32 is powered by a 3.3V LDO regulator. </p>
+										
+										<p class="gold">The IO sheet contains the RS-232 circuit, OLED display header, and relay drivers for controlling the fan, 4-wire sense, and PSU power relays. </p>
+										
+										<p class="gold">Finally, the UI board contains the buttons used to control the power supply. The author selected Kalih Choc V1 mechanical switches to improve the tactile experience of the product. </p>
+										
+										<h3>Mechanical and Industrial Design</h3>
+										
+										<p class="gold">The physical design rearranged the buttons from the original power supply to enhance usability, while maintaining access to all features of the original power supply.   </p>
+
+										<p class="gold"> It is important to consider the mechanical and usability aspects of any embedded system design. I enjoy creating projects at the intersection between engineering and industrial design to create the best product possible. </p>
+									</header>
+									<div class="content">
+										<div class="gallery">
+											<a id="dynamicProjectImage" href="images/psu_ui/CPU.png" ><img src="images/psu_ui/CPU_thumb.png" alt="" /></a>
+											<a id="dynamicProjectImage" href="images/psu_ui/Power.png" ><img src="images/psu_ui/Power_thumbn.png" alt="" /></a>
+											<a id="dynamicProjectImage" href="images/psu_ui/IO.png" ><img src="images/psu_ui/IO_thumb.png" alt="" /></a>
+											<a id="dynamicProjectImage" href="images/psu_ui/UI.png" ><img src="images/psu_ui/UI_thumb.png" alt="" /></a>
+											<a id="dynamicProjectImage" href="images/psu_ui/CAD_iso.png" class="landscape" ><img src="images/psu_ui/CAD_iso.png" alt="" /></a>
+											<a id="dynamicProjectImage" href="images/psu_ui/CAD_exploded.png" class="landscape" ><img src="images/psu_ui/CAD_exploded.png" alt="exploded view of aftermarket UI upgrade" /></a>
+										</div>
+									</div>
+								</section>
+
+					
+
+						</div>
+					</section>
+
+
+					<!-- Section PCB steps-->
+					<section>
+						<header>
+							<h2>Board Bring-up and Electronic Prototype Assembly</h2>
+						</header>
+						<div class="content">
+							<p>With the design work done, now it is time to <strong>assemble and test the prototype</strong>. The prototype consists of two PCBAs and associated software. The PCB fab and SMT assembly were contracted to JLCPCB. I installed all through-hole components (keys, display, connectors) and wrote test software to control the system.</p>
+
+							<!-- Section -->
+								<section>
+									<header>
+										<h3>Board Bring-up</h3>
+										<p class="gold">The testing and bring-up process for this product was fairly straightforward. Only two modifications were needed to get the system working as designed (Accidental use of GPIO 36 and 39 for button input; these pins on the ESP32 don't have internal pull-up resistors). </p>
+										
+										<p class="gold">Because the software application was simple, the Arduino IDE was used to develop the firmware and program the ESP32.</p>
+										
+										<p class="gold">There are individually-addressable RGB LEDs under each key. Here, the "OPERATE" key is highlighted in blue to show thje user that the output of the PSU is on. </p>
+										
+										<p class="gold">The last board shown is a simple interconnect PCB that connects the RS232 output of the main PCB to the RJ-45 jack used by the 2304A. </p>
+										
+										<p class="gold">During testing, the prototype embedded system <strong class="gold"> sucessfully controlled the Keithley 2304A</strong>, exactly achieving the functionality of the OEM Remote Control module. </p>
+
+									</header>
+									<div class="content">
+										<div class="gallery">
+											<a id="dynamicProjectImage" href="images/psu_ui/bring_up_front.jpg" class="landscape"><img src="images/psu_ui/bring_up_front.jpg" alt="" /></a>
+											<a id="dynamicProjectImage" href="images/psu_ui/pcb_back.jpg" ><img src="images/psu_ui/pcb_back_thumb.jpg" alt="" /></a>
+											<a id="dynamicProjectImage" href="images/psu_ui/pcb_interconnect.jpg" ><img src="images/psu_ui/pcb_interconnect.jpg" alt="" /></a>											
+										</div>
+									</div>
+								</section>
+
+					
+
+						</div>
+					</section>
+					
+					<!-- Section Case steps-->
+					<section>
+						<header>
+							<h2>Bonus content: project case assembly</h2>
+						</header>
+						<div class="content">
+							<p>I wanted an <strong>excuse to play with a CNC router</strong>. I enjoy thinking about the mechanical and industrial design of electronics projects, including how the project exists as a finished product. Since a finished product requires a bit more than a pile of PCBs, I need to fabricate a case.
+
+							<!-- Section -->
+								<section>
+									<header>
+										<h3>Case construction</h3>
+										<p class="gold">The case was designed in Fusion 360 and routed on a local makerspace's CNC machine. The design language is a bit retro-futuristic, reminiscent of atmoic age control panels. I enjoy this style for bench equipment.</p>
+										
+										<p class="gold">The CNC machine used is a variant of the Joe's CNC. The cutting area was 4' by 4' which was overkill for this application. I ended up fabricating 3 cases. Each case has space for 2 UI boards, meaning I have room for future expansion using this panel form-factor.</p>
+										
+										<p class="gold">A test-fit with the front panel proved that the aftermarket UI assembly will fit into the CNC-routed case. </p>
+										
+										<p class="gold">The black front panel of the system is actually an aluminum PCB with white silkscreen. The layout of the new controls can be seen in the last image. </p>
+										
+									</header>
+									<div class="content">
+										<div class="gallery">
+											<a id="dynamicProjectImage" href="images/psu_ui/case_cnc.jpg" ><img src="images/psu_ui/case_cnc.jpg" alt="" /></a>
+											<a id="dynamicProjectImage" href="images/psu_ui/case_assembly.jpg" ><img src="images/psu_ui/case_assembly.jpg" alt="" /></a>
+											<a id="dynamicProjectImage" href="images/psu_ui/case_testfit.jpg" class="landscape"><img src="images/psu_ui/case_testfit.jpg" alt="" /></a>	
+											<!--a id="dynamicProjectImage" href="images/psu_ui/frontPanel.jpg" class="landscape"><img src="images/psu_ui/frontPanel.jpg" alt="" /></a-->											
+										</div>
+									</div>
+								</section>
+
+					
+
+						</div>
+					</section>
+
+
+
+				<!-- Section -->
+<!-- 					<section>
+						<header>
+							<h2>Feugiat consequat tempus ultrices</h2>
+						</header>
+						<div class="content">
+							<p><strong>Etiam tristique libero</strong> eu nibh porttitor amet fermentum. Nullam venenatis erat id vehicula ultrices sed ultricies condimentum.</p>
+							<ul class="feature-icons">
+								<li class="icon solid fa-laptop">Consequat tempus</li>
+								<li class="icon solid fa-bolt">Etiam adipiscing</li>
+								<li class="icon solid fa-signal">Libero nullam</li>
+								<li class="icon solid fa-cog">Blandit condimentum</li>
+								<li class="icon solid fa-map-marker-alt">Lorem ipsum dolor</li>
+								<li class="icon solid fa-code">Nibh amet venenatis</li>
+							</ul>
+							<p>Vehicula ultrices sed ultricies condimentum. Magna sed etiam consequat, et lorem adipiscing sed nulla. Volutpat nisl et tempus et dolor libero, feugiat magna tempus, sed et lorem adipiscing.</p>
+						</div>
+					</section>
+
+				
+
+				<!-- Section -->
+					<!-- <section>
+						<header>
+							<h2>Duis sed adpiscing veroeros amet</h2>
+						</header>
+						<div class="content">
+							<p><strong>Proin tempus feugiat</strong> sed varius enim lorem ullamcorper dolore aliquam aenean ornare velit lacus, ac varius enim lorem ullamcorper dolore.</p>
+							<ul class="actions">
+								<li><a href="#" class="button primary large">Get Started</a></li>
+								<li><a href="#" class="button large">Learn More</a></li>
+							</ul>
+						</div>
+					</section> -->
+
+				<!-- Elements -->
+				<!--
+					<section>
+						<header>
+							<h2>Elements</h2>
+						</header>
+						<div class="content">
+
+							<section>
+								<header>
+									<h3>Text</h3>
+								</header>
+								<div class="content">
+									<p>This is <b>bold</b> and this is <strong>strong</strong>. This is <i>italic</i> and this is <em>emphasized</em>.
+									This is <sup>superscript</sup> text and this is <sub>subscript</sub> text.
+									This is <u>underlined</u> and this is code: <code>for (;;) { ... }</code>. Finally, <a href="#">this is a link</a>.</p>
+									<hr />
+									<h2>Heading Level 2</h2>
+									<h3>Heading Level 3</h3>
+									<h4>Heading Level 4</h4>
+									<h5>Heading Level 5</h5>
+									<hr />
+									<h5>Blockquote</h5>
+									<blockquote>Fringilla nisl. Donec accumsan interdum nisi, quis tincidunt felis sagittis eget tempus euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan faucibus. Vestibulum ante ipsum primis in faucibus lorem ipsum dolor sit amet nullam adipiscing eu felis.</blockquote>
+									<h5>Preformatted</h5>
+									<pre><code>i = 0;
+
+while (!deck.isInOrder()) {
+  print 'Iteration ' + i;
+  deck.shuffle();
+  i++;
+}
+
+print 'Sorted in ' + i + ' iterations.';</code></pre>
+								</div>
+							</section>
+
+							<section>
+								<header>
+									<h3>Lists</h3>
+								</header>
+								<div class="content">
+
+									<h4>Unordered</h4>
+									<ul>
+										<li>Dolor pulvinar etiam.</li>
+										<li>Sagittis adipiscing.</li>
+										<li>Felis enim feugiat.</li>
+									</ul>
+
+									<h4>Alternate</h4>
+									<ul class="alt">
+										<li>Dolor pulvinar etiam.</li>
+										<li>Sagittis adipiscing.</li>
+										<li>Felis enim feugiat.</li>
+									</ul>
+
+									<h4>Ordered</h4>
+									<ol>
+										<li>Dolor pulvinar etiam.</li>
+										<li>Etiam vel felis viverra.</li>
+										<li>Felis enim feugiat.</li>
+										<li>Dolor pulvinar etiam.</li>
+										<li>Etiam vel felis lorem.</li>
+										<li>Felis enim et feugiat.</li>
+									</ol>
+									<h4>Icons</h4>
+									<ul class="icons">
+										<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
+										<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
+										<li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+										<li><a href="#" class="icon brands fa-github"><span class="label">Github</span></a></li>
+									</ul>
+
+									<h4>Actions</h4>
+									<ul class="actions">
+										<li><a href="#" class="button primary">Default</a></li>
+										<li><a href="#" class="button">Default</a></li>
+									</ul>
+									<ul class="actions stacked">
+										<li><a href="#" class="button primary">Default</a></li>
+										<li><a href="#" class="button">Default</a></li>
+									</ul>
+								</div>
+							</section>
+
+							<section>
+								<header>
+									<h3>Table</h3>
+								</header>
+								<div class="content">
+									<h4>Default</h4>
+									<div class="table-wrapper">
+										<table>
+											<thead>
+												<tr>
+													<th>Name</th>
+													<th>Description</th>
+													<th>Price</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>Item One</td>
+													<td>Ante turpis integer aliquet porttitor.</td>
+													<td>29.99</td>
+												</tr>
+												<tr>
+													<td>Item Two</td>
+													<td>Vis ac commodo adipiscing arcu aliquet.</td>
+													<td>19.99</td>
+												</tr>
+												<tr>
+													<td>Item Three</td>
+													<td> Morbi faucibus arcu accumsan lorem.</td>
+													<td>29.99</td>
+												</tr>
+												<tr>
+													<td>Item Four</td>
+													<td>Vitae integer tempus condimentum.</td>
+													<td>19.99</td>
+												</tr>
+												<tr>
+													<td>Item Five</td>
+													<td>Ante turpis integer aliquet porttitor.</td>
+													<td>29.99</td>
+												</tr>
+											</tbody>
+											<tfoot>
+												<tr>
+													<td colspan="2"></td>
+													<td>100.00</td>
+												</tr>
+											</tfoot>
+										</table>
+									</div>
+
+									<h4>Alternate</h4>
+									<div class="table-wrapper">
+										<table class="alt">
+											<thead>
+												<tr>
+													<th>Name</th>
+													<th>Description</th>
+													<th>Price</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>Item One</td>
+													<td>Ante turpis integer aliquet porttitor.</td>
+													<td>29.99</td>
+												</tr>
+												<tr>
+													<td>Item Two</td>
+													<td>Vis ac commodo adipiscing arcu aliquet.</td>
+													<td>19.99</td>
+												</tr>
+												<tr>
+													<td>Item Three</td>
+													<td> Morbi faucibus arcu accumsan lorem.</td>
+													<td>29.99</td>
+												</tr>
+												<tr>
+													<td>Item Four</td>
+													<td>Vitae integer tempus condimentum.</td>
+													<td>19.99</td>
+												</tr>
+												<tr>
+													<td>Item Five</td>
+													<td>Ante turpis integer aliquet porttitor.</td>
+													<td>29.99</td>
+												</tr>
+											</tbody>
+											<tfoot>
+												<tr>
+													<td colspan="2"></td>
+													<td>100.00</td>
+												</tr>
+											</tfoot>
+										</table>
+									</div>
+								</div>
+							</section>
+
+							<section>
+								<header>
+									<h3>Buttons</h3>
+								</header>
+								<div class="content">
+									<ul class="actions">
+										<li><a href="#" class="button primary">Primary</a></li>
+										<li><a href="#" class="button">Default</a></li>
+									</ul>
+									<ul class="actions">
+										<li><a href="#" class="button large">Large</a></li>
+										<li><a href="#" class="button">Default</a></li>
+										<li><a href="#" class="button small">Small</a></li>
+									</ul>
+									<ul class="actions">
+										<li><a href="#" class="button primary icon solid fa-download">Icon</a></li>
+										<li><a href="#" class="button icon solid fa-download">Icon</a></li>
+									</ul>
+									<ul class="actions">
+										<li><span class="button primary disabled">Disabled</span></li>
+										<li><span class="button disabled">Disabled</span></li>
+									</ul>
+								</div>
+							</section>
+
+							<section>
+								<header>
+									<h3>Form</h3>
+								</header>
+								<div class="content">
+									<form method="post" action="#">
+										<div class="fields">
+											<div class="field half">
+												<label for="demo-name">Name</label>
+												<input type="text" name="demo-name" id="demo-name" value="" placeholder="Jane Doe" />
+											</div>
+											<div class="field half">
+												<label for="demo-email">Email</label>
+												<input type="email" name="demo-email" id="demo-email" value="" placeholder="jane@untitled.tld" />
+											</div>
+											<div class="field">
+												<label for="demo-category">Category</label>
+												<select name="demo-category" id="demo-category">
+													<option value="">-</option>
+													<option value="1">Manufacturing</option>
+													<option value="1">Shipping</option>
+													<option value="1">Administration</option>
+													<option value="1">Human Resources</option>
+												</select>
+											</div>
+											<div class="field half">
+												<input type="radio" id="demo-priority-low" name="demo-priority" checked>
+												<label for="demo-priority-low">Low</label>
+											</div>
+											<div class="field half">
+												<input type="radio" id="demo-priority-high" name="demo-priority">
+												<label for="demo-priority-high">High</label>
+											</div>
+											<div class="field half">
+												<input type="checkbox" id="demo-copy" name="demo-copy">
+												<label for="demo-copy">Email me a copy</label>
+											</div>
+											<div class="field half">
+												<input type="checkbox" id="demo-human" name="demo-human" checked>
+												<label for="demo-human">Not a robot</label>
+											</div>
+											<div class="field">
+												<label for="demo-message">Message</label>
+												<textarea name="demo-message" id="demo-message" placeholder="Enter your message" rows="6"></textarea>
+											</div>
+										</div>
+										<ul class="actions">
+											<li><input type="submit" value="Send Message" class="primary" /></li>
+											<li><input type="reset" value="Reset" /></li>
+										</ul>
+									</form>
+								</div>
+							</section>
+
+						</div>
+					</section>
+				-->
+
+				<!-- Section -->
+					<!-- <section>
+						<header>
+							<h2>Get in touch</h2>
+						</header>
+						<div class="content">
+							<p><strong>Auctor commodo</strong> interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis dolor imperdiet dolor mattis sagittis.</p>
+							<form>
+								<div class="fields">
+									<div class="field half">
+										<input type="text" name="name" id="name" placeholder="Name" />
+									</div>
+									<div class="field half">
+										<input type="email" name="email" id="email" placeholder="Email" />
+									</div>
+									<div class="field">
+										<textarea name="message" id="message" placeholder="Message" rows="7"></textarea>
+									</div>
+								</div>
+								<ul class="actions">
+									<li><input type="submit" value="Send Message" class="button primary" /></li>
+								</ul>
+							</form>
+						</div>
+						<footer>
+							<ul class="items">
+								<li>
+									<h3>Email</h3>
+									<a href="#">information@untitled.ext</a>
+								</li>
+								<li>
+									<h3>Phone</h3>
+									<a href="#">(000) 000-0000</a>
+								</li>
+								<li>
+									<h3>Address</h3>
+									<span>1234 Somewhere Road, Nashville, TN 00000</span>
+								</li>
+								<li>
+									<h3>Elsewhere</h3>
+									<ul class="icons">
+										<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
+										<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
+										<li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+										<li><a href="#" class="icon brands fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
+										<li><a href="#" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+										<li><a href="#" class="icon brands fa-codepen"><span class="label">Codepen</span></a></li>
+									</ul>
+								</li>
+							</ul>
+						</footer>
+					</section> -->
+
+				<!-- Copyright -->
+				<footer>
+					<section>
+					<!-- <a href="../index.html" style="margin-left: 25%; "class="  "><strong>Back to Projects</strong></a> -->
+
+						<div class="copyright">&copy; Untitled. All rights reserved. Design: <a href="https://html5up.net">HTML5 UP</a>.
+							<a href="../index.html"  class="  "><strong>Back to Projects</strong></a>
+						</div>
+ 		`			</section>
+				</footer>
+			</div>
+
+		<!-- Scripts -->
+			<script src="../assets/js/jquery.min.js"></script>
+			<script src="../assets/js/jquery.scrolly.min.js"></script>
+			<script src="../assets/js/browser.min.js"></script>
+			<script src="../assets/js/breakpoints.min.js"></script>
+			<script src="../assets/js/util.js"></script>
+			<script src="../assets/js/main_projects.js"></script>
+
+	</body>
+</html>
