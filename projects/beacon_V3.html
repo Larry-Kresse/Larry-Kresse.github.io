@@ -1,0 +1,635 @@
+<!DOCTYPE HTML>
+<!--
+	Paradigm Shift by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Celestial Navigator V3</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<meta name="description" content="" />
+		<meta name="keywords" content="" />
+		<link rel="stylesheet" href="../assets/css/main_project.css" />
+		
+		
+			<section>
+						
+						<header>
+							<a href="../index.html" style="margin-left: 25%; "class="  "><strong>Back to Projects</strong></a>
+						</header>
+				
+						
+			</section>
+	</head>
+	<body class="is-preload">
+	<!-- <script>
+        // Define the variable
+        let project = "template";
+
+        // Function to update the href
+        function updateHref() {
+            const images = document.getElementsByClassName('image main');
+			
+			var regex = new RegExp("[^\\/]+$");
+			
+			
+			for (let i = 0; i < images.length; i++) {
+				let curSrc = images[i].src;
+			
+				let rawImgName = regex.exec(curSrc);
+			
+			
+				//check if image is thumbnail or full res, modify path accordingly
+
+			
+				console.log(rawImgName);
+			
+				images[i].src = "../images/projects/"+project+"/"+rawImgName[0];
+			
+				images[i].href = "../images/projects/"+project+"/"+rawImgName[0];
+			}
+        }
+
+        // Update the href when the document is loaded
+        document.addEventListener("DOMContentLoaded", updateHref);
+    </script> -->
+	
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+				<!-- nav -->
+				
+				
+				
+				<!-- Intro -->
+					<section class="intro">
+					
+						<header>
+							
+							<h1>Celestial Navigator <small>Version 3</small></h1>
+							<p class="gold_always">An upgraded off-grid communicator, designed to be mass-prodruced.</p>
+							<p class="gold_always">Also designed to improve on the performance of <a class="gold" href="beacon_V1.html">Version 1</a> and <a class="gold" href="beacon_V2.html">Version 2</a></p>
+							<ul class="actions">
+<!-- 								<li><a href="#first" class="arrow back_arrow"><span class="label">Next</span></a></li>
+ -->							</ul>
+						</header>
+						<div class="content">
+							<span class="image fill" data-position="center"><img src="images/beacon/V3_CAD.png" alt="" /></span>
+						</div>
+					</section>
+
+				<!-- Section background -->
+					<section id="first">
+						<header>
+							<h2>Background</h2>
+						</header>
+						<div class="content">
+							<p> Last time, I built and user tested a second off-grid communicator. The test went well, but manufacturability of Versions 1 and 2 was a problem. </p>
+							<p>It is time to design <strong>Version 3</strong> of the Celestial Navigator. Ideally, this one can be mass-produced in greater numbers than ever before.</p>
+							<p> <small> (Hint: click on the thumbnails to view the full image) </small>  </p>
+
+							<span class="image main"><img src="images/beacon/V3_CAD.png" alt="" /></span>
+						</div>
+					</section>
+
+				<!-- Section first steps-->
+					<section>
+						<header>
+							<h2>Hardware Design Changes</h2>
+						</header>
+						<div class="content">
+							<p>THIS SECTION IS A WORK-IN-PROGRESS   </p>
+							
+								<!-- Section 
+								<section>
+									<header>
+										<h3>Electronics Design</h3>
+										<p class="gold"> The electrical hardware design has much in common with Version 1. The biggest changes include integrating compass, accellerometer, and GPS sensors in the PCB design rather than using external breakout boards. This allows for a thinner, more robust, and more manufacturable design. The soft power switch from Version 1 was also eliminated for simplicity, cost, and ease of use.</p>
+										
+										<p class="gold"> The first schematic contains the ESP 32 and support circuitry. The second schematic shows the user input components: the switches and knob. Almost nothing about these sheets changed from version 1.</p>
+										
+										<p class="gold"> The third schematic contains the indication LEDs. The main change was the addition of side-firing LEDs for the flashlight. Version 1 had a flashlight, but it wasn't very effective due to using up-firing LEDs with a makeshift reflector.</p>
+
+										<p class="gold"> The fourth schematic sheet contains the sensors and RF components. External breakout boards have been eliminated and all sensors are now integrated on the Navigator's PCB.</p>
+
+										<p class="gold"> The final schematic contains the power management circuitry. The TI TPS61088-based boost converter is still present. A TI BQ29700-based battery protection circuit is implemented to avoid overdischarging the lithium battery. Version 1 had a soft power button and software-controlled battery management, so it could shut itself down if the battery voltage dropped too low. Since Version 2 eliminates the soft power button for simplicity, a hardware solution for battery protection was needed.</p>
+									</header>
+									<div class="content">
+										<div class="gallery">
+											<a id="dynamicProjectImage" href="images/beacon/BeaconV2_ESP32.png" class="landscape" ><img src="images/beacon/BeaconV2_ESP32.png" alt="" /></a>
+											<a id="dynamicProjectImage" href="images/beacon/BeaconV2_Digital_IO.png" class="landscape" ><img src="images/beacon/BeaconV2_Digital_IO.png" alt="" /></a>
+											<a id="dynamicProjectImage" href="images/beacon/BeaconV2_LEDs.png" class="landscape" ><img src="images/beacon/BeaconV2_LEDs.png" alt="" /></a>
+											<a id="dynamicProjectImage" href="images/beacon/BeaconV2_Modules.png" class="landscape"><img src="images/beacon/BeaconV2_Modules.png" alt="" /></a>
+											<a id="dynamicProjectImage" href="images/beacon/BeaconV2_Power_Core.png" class="landscape" ><img src="images/beacon/BeaconV2_Power_Core.png" alt="" /></a>										</div>
+									</div>
+								</section>-->
+								<!-- Section 
+								<section>
+									<header>
+										<h3>Board Design</h3>
+										<p class="gold">The PCB layout is similar to version 1's layout. Major changes include the 18650 battery mount. V2 has a battery holder that enables hotswapping batteries, where V1's battery was soldered in place. V2 also incorporates a physical power switch, a battery protection circuit, and a soldered-down GPS module.  </p>
+										
+										<p class="gold">The only component that is still implemented as a breakout board is the OLED screen, which has doubled in size from V1, measuring 128x64 pixels (MID). There also is an option for a 128x128 pixel OLED (BIG). </p> 
+										
+										<p class="gold">Like version 1, this is a 4 layer board. The top mostly has traces running left-to-right, and the bottom mostly top-to-bottom. This project has been very helpful for leveling up my PCB design skills, and the resulting PCB is much cleaner than Version 1's board.</p> 
+									</header>
+									<div class="content">
+										<div class="gallery">
+											<a id="dynamicProjectImage" href="images/beacon/V2_PCB_bothsides.png" class="landscape"><img src="images/beacon/V2_PCB_bothsides.png" alt="" /></a>
+											<a id="dynamicProjectImage" href="images/beacon/V2_PCB_bothsides.png" class="landscape"><img src="images/beacon/V1_PCB_bothsides.png" alt="" /></a>
+
+											
+										</div>
+									</div>
+								</section>-->
+
+								<!-- Section 
+								<section>
+									<header>
+										<h3>Mechanical Design</h3>
+										<p class="gold">V2's physical design shares some commonality with V1. The gray case that fits around the PCBA uses a similar design, and the "shield" pieces printed in an accent color are used again for this project.   </p>
+										
+										<p class="gold">Where the design starts diverging is the antenna mount. Where V1 used an unconstrained rubber duck antenna, V2 constrains the antenna in a hinged mounting clip. This is designed to keep the antenna upgright using gravity. If the antenna stays upright with respect to the ground, it will perform much better than V1's antenna. </p>
+										
+										<p class="gold">The version 2 also contains a clip over the programming port, allowing access without dismantling the device and a battery door to enable 18650 battery hot-swapping. </p>
+									</header>
+									<div class="content">
+										<div class="gallery">
+											<a id="dynamicProjectImage" href="images/beacon/CAD_beacon_V2_overview.png" class="landscape"><img src="images/beacon/CAD_beacon_V2_overview.png" alt="" /></a>
+
+											<a id="dynamicProjectImage" href="images/beacon/CAD_beacon_V2_exploded.png" class="landscape"><img src="images/beacon/CAD_beacon_V2_exploded.png" alt="" /></a>
+											
+										</div>
+									</div>
+								</section>-->
+
+					
+
+						</div>
+					</section>
+					
+					<!-- Section PCB Design steps-->
+					<section>
+						<header>
+							<h2>Board Bring-up</h2>
+						</header>
+						<div class="content">
+							<p> THIS SECTION IS A WORK-IN-PROGRESS </strong>. </p>
+																					
+							
+							<!-- Section 
+								<section>
+									<header>
+										<h3>Bring-up</h3>
+										<p class="gold"> Bringing-up a board involves a variety of firmware, software, and electrical engineering experience. Embedded code must be written to interface with sensors and actuators on the board. Power systems must be stress tested to ensure they can perform in adverse conditions. Often, test equipment like Oscilloscopes and Spectrum Analyzers are needed to debug electrical issues with the prototype. </p>
+
+										
+										<p class="gold">This project required a few board runs to get working correctly. Due to the amount of IO devices on the board, the ESP32's strapping pins were needed. This resulted in some challenges as I determined how ensure they were in the right state at boot, but still be usable for functionality when the device was in use. </p>
+										
+										<p class="gold"> The top image shows the indicator LEDs being tested with a full-green test pattern. An Adafruit library and test pattern was used to test the OLED display. The bottom image shows a fully-assembled PCBA. This was the hardware that made it out of the board bring-up stage to prototype production. </p>
+										
+									</header>
+									<div class="content">
+										<div class="gallery">
+											<a id="dynamicProjectImage" href="images/beacon/early_bring_up.jpg" class="landscape" ><img src="images/beacon/early_bring_up.jpg" alt="" /></a>
+											<a id="dynamicProjectImage" href="images/beacon/beacon_PCBA.jpg" class="landscape"><img src="images/beacon/beacon_PCBA.jpg" alt="" /></a>
+
+										</div>
+									</div>
+								</section>-->
+
+					
+
+						</div>
+					</section>
+
+
+					<!-- Section PCB steps-->
+					<section>
+						<header>
+							<h2>Prototype Run and User Testing</h2>
+						</header>
+						<div class="content">
+							<p>THIS SECTION IS A WORK-IN-PROGRESS </p>
+
+							
+							<!-- Section 
+								<section>
+									<header>
+										<h3>User Testing</h3>
+										<p class="gold">The Celestial Navigator V2 continues the pattern of cyberpunk-inspired industrial design. The first picture shows one of the 30 prototypes used in user testing, sending an SOS message. Luckily, nobody in testing needed this feature!</p>
+
+										<p class="gold">The 30 prototypes were deployed at a camping event. Users were again given a brief crash course on the UI and then released into the wild wielding their communicator. The simplicity of the interface meant that people who used the device last year didn't need a refresher. </p>
+																				
+										<p class="gold">The caribiner clip was pushed as the dominant attachment method, as it enables the antenna to be properly positioned. At the event, I noticed that the antenna clip had the desired effect. Antennas of Navigators remained pointed at the sky, the optimal pointing for a monopole rubber duck. Subjective range appeared vastly greater than the V1 test. </p>
+																				
+										<p class="gold">The number one problem identified was once again the Antenna. Though the caribiner clip worked, the rotating antenna added significant mechanical complexity and failure points. Some of the SMA cables came undone due to vibration. The design was also more difficult to assemble than I'd like. </p>
+
+										<p class="gold">Version 2 of the Navigator worked even better than Version 1, but I am apparently never satisfied with my projects, so it is time for <strong class = "gold"><a class="gold" href="beacon_V3.html"> Version 3 of the Celestial Navigator</a></strong></strong>!</p>
+
+									</header>
+									<div class="content">
+										<div class="gallery">
+											<a id="dynamicProjectImage" href="images/beacon/beacon_V2_SOS.png" class="landscape"><img src="images/beacon/beacon_V2_SOS.png" alt="" /></a>
+											<a id="dynamicProjectImage" href="images/beacon/Beacon_V2_dooropen.png" class="landscape"><img src="images/beacon/Beacon_V2_dooropen.png" alt="" /></a>
+											<a id="dynamicProjectImage" href="images/beacon/radiation_pattern_monopole.png" class="landscape"><img src="images/beacon/radiation_pattern_monopole.png" alt="" /></a>
+											<a id="dynamicProjectImage" href="images/beacon/beaconV2_worn_on_backpack.png" class="landscape"><img src="images/beacon/beaconV2_worn_on_backpack.png" alt="" /></a>
+
+										 	<a id="dynamicProjectImage" >
+												<video id="dynamicProjectImage" width="1000" height="500" controls>
+													<source src = "images/beacon/beacon_v1_whitebg.mp4" type="video/mp4">
+												</video>
+											</a> 
+										</div>
+									</div>
+								</section>-->
+
+					
+
+						</div>
+					</section>
+					
+
+
+
+
+				<!-- Section -->
+<!-- 					<section>
+						<header>
+							<h2>Feugiat consequat tempus ultrices</h2>
+						</header>
+						<div class="content">
+							<p><strong>Etiam tristique libero</strong> eu nibh porttitor amet fermentum. Nullam venenatis erat id vehicula ultrices sed ultricies condimentum.</p>
+							<ul class="feature-icons">
+								<li class="icon solid fa-laptop">Consequat tempus</li>
+								<li class="icon solid fa-bolt">Etiam adipiscing</li>
+								<li class="icon solid fa-signal">Libero nullam</li>
+								<li class="icon solid fa-cog">Blandit condimentum</li>
+								<li class="icon solid fa-map-marker-alt">Lorem ipsum dolor</li>
+								<li class="icon solid fa-code">Nibh amet venenatis</li>
+							</ul>
+							<p>Vehicula ultrices sed ultricies condimentum. Magna sed etiam consequat, et lorem adipiscing sed nulla. Volutpat nisl et tempus et dolor libero, feugiat magna tempus, sed et lorem adipiscing.</p>
+						</div>
+					</section>
+
+				
+
+				<!-- Section -->
+					<!-- <section>
+						<header>
+							<h2>Duis sed adpiscing veroeros amet</h2>
+						</header>
+						<div class="content">
+							<p><strong>Proin tempus feugiat</strong> sed varius enim lorem ullamcorper dolore aliquam aenean ornare velit lacus, ac varius enim lorem ullamcorper dolore.</p>
+							<ul class="actions">
+								<li><a href="#" class="button primary large">Get Started</a></li>
+								<li><a href="#" class="button large">Learn More</a></li>
+							</ul>
+						</div>
+					</section> -->
+
+				<!-- Elements -->
+				<!--
+					<section>
+						<header>
+							<h2>Elements</h2>
+						</header>
+						<div class="content">
+
+							<section>
+								<header>
+									<h3>Text</h3>
+								</header>
+								<div class="content">
+									<p>This is <b>bold</b> and this is <strong>strong</strong>. This is <i>italic</i> and this is <em>emphasized</em>.
+									This is <sup>superscript</sup> text and this is <sub>subscript</sub> text.
+									This is <u>underlined</u> and this is code: <code>for (;;) { ... }</code>. Finally, <a href="#">this is a link</a>.</p>
+									<hr />
+									<h2>Heading Level 2</h2>
+									<h3>Heading Level 3</h3>
+									<h4>Heading Level 4</h4>
+									<h5>Heading Level 5</h5>
+									<hr />
+									<h5>Blockquote</h5>
+									<blockquote>Fringilla nisl. Donec accumsan interdum nisi, quis tincidunt felis sagittis eget tempus euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan faucibus. Vestibulum ante ipsum primis in faucibus lorem ipsum dolor sit amet nullam adipiscing eu felis.</blockquote>
+									<h5>Preformatted</h5>
+									<pre><code>i = 0;
+
+while (!deck.isInOrder()) {
+  print 'Iteration ' + i;
+  deck.shuffle();
+  i++;
+}
+
+print 'Sorted in ' + i + ' iterations.';</code></pre>
+								</div>
+							</section>
+
+							<section>
+								<header>
+									<h3>Lists</h3>
+								</header>
+								<div class="content">
+
+									<h4>Unordered</h4>
+									<ul>
+										<li>Dolor pulvinar etiam.</li>
+										<li>Sagittis adipiscing.</li>
+										<li>Felis enim feugiat.</li>
+									</ul>
+
+									<h4>Alternate</h4>
+									<ul class="alt">
+										<li>Dolor pulvinar etiam.</li>
+										<li>Sagittis adipiscing.</li>
+										<li>Felis enim feugiat.</li>
+									</ul>
+
+									<h4>Ordered</h4>
+									<ol>
+										<li>Dolor pulvinar etiam.</li>
+										<li>Etiam vel felis viverra.</li>
+										<li>Felis enim feugiat.</li>
+										<li>Dolor pulvinar etiam.</li>
+										<li>Etiam vel felis lorem.</li>
+										<li>Felis enim et feugiat.</li>
+									</ol>
+									<h4>Icons</h4>
+									<ul class="icons">
+										<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
+										<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
+										<li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+										<li><a href="#" class="icon brands fa-github"><span class="label">Github</span></a></li>
+									</ul>
+
+									<h4>Actions</h4>
+									<ul class="actions">
+										<li><a href="#" class="button primary">Default</a></li>
+										<li><a href="#" class="button">Default</a></li>
+									</ul>
+									<ul class="actions stacked">
+										<li><a href="#" class="button primary">Default</a></li>
+										<li><a href="#" class="button">Default</a></li>
+									</ul>
+								</div>
+							</section>
+
+							<section>
+								<header>
+									<h3>Table</h3>
+								</header>
+								<div class="content">
+									<h4>Default</h4>
+									<div class="table-wrapper">
+										<table>
+											<thead>
+												<tr>
+													<th>Name</th>
+													<th>Description</th>
+													<th>Price</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>Item One</td>
+													<td>Ante turpis integer aliquet porttitor.</td>
+													<td>29.99</td>
+												</tr>
+												<tr>
+													<td>Item Two</td>
+													<td>Vis ac commodo adipiscing arcu aliquet.</td>
+													<td>19.99</td>
+												</tr>
+												<tr>
+													<td>Item Three</td>
+													<td> Morbi faucibus arcu accumsan lorem.</td>
+													<td>29.99</td>
+												</tr>
+												<tr>
+													<td>Item Four</td>
+													<td>Vitae integer tempus condimentum.</td>
+													<td>19.99</td>
+												</tr>
+												<tr>
+													<td>Item Five</td>
+													<td>Ante turpis integer aliquet porttitor.</td>
+													<td>29.99</td>
+												</tr>
+											</tbody>
+											<tfoot>
+												<tr>
+													<td colspan="2"></td>
+													<td>100.00</td>
+												</tr>
+											</tfoot>
+										</table>
+									</div>
+
+									<h4>Alternate</h4>
+									<div class="table-wrapper">
+										<table class="alt">
+											<thead>
+												<tr>
+													<th>Name</th>
+													<th>Description</th>
+													<th>Price</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>Item One</td>
+													<td>Ante turpis integer aliquet porttitor.</td>
+													<td>29.99</td>
+												</tr>
+												<tr>
+													<td>Item Two</td>
+													<td>Vis ac commodo adipiscing arcu aliquet.</td>
+													<td>19.99</td>
+												</tr>
+												<tr>
+													<td>Item Three</td>
+													<td> Morbi faucibus arcu accumsan lorem.</td>
+													<td>29.99</td>
+												</tr>
+												<tr>
+													<td>Item Four</td>
+													<td>Vitae integer tempus condimentum.</td>
+													<td>19.99</td>
+												</tr>
+												<tr>
+													<td>Item Five</td>
+													<td>Ante turpis integer aliquet porttitor.</td>
+													<td>29.99</td>
+												</tr>
+											</tbody>
+											<tfoot>
+												<tr>
+													<td colspan="2"></td>
+													<td>100.00</td>
+												</tr>
+											</tfoot>
+										</table>
+									</div>
+								</div>
+							</section>
+
+							<section>
+								<header>
+									<h3>Buttons</h3>
+								</header>
+								<div class="content">
+									<ul class="actions">
+										<li><a href="#" class="button primary">Primary</a></li>
+										<li><a href="#" class="button">Default</a></li>
+									</ul>
+									<ul class="actions">
+										<li><a href="#" class="button large">Large</a></li>
+										<li><a href="#" class="button">Default</a></li>
+										<li><a href="#" class="button small">Small</a></li>
+									</ul>
+									<ul class="actions">
+										<li><a href="#" class="button primary icon solid fa-download">Icon</a></li>
+										<li><a href="#" class="button icon solid fa-download">Icon</a></li>
+									</ul>
+									<ul class="actions">
+										<li><span class="button primary disabled">Disabled</span></li>
+										<li><span class="button disabled">Disabled</span></li>
+									</ul>
+								</div>
+							</section>
+
+							<section>
+								<header>
+									<h3>Form</h3>
+								</header>
+								<div class="content">
+									<form method="post" action="#">
+										<div class="fields">
+											<div class="field half">
+												<label for="demo-name">Name</label>
+												<input type="text" name="demo-name" id="demo-name" value="" placeholder="Jane Doe" />
+											</div>
+											<div class="field half">
+												<label for="demo-email">Email</label>
+												<input type="email" name="demo-email" id="demo-email" value="" placeholder="jane@untitled.tld" />
+											</div>
+											<div class="field">
+												<label for="demo-category">Category</label>
+												<select name="demo-category" id="demo-category">
+													<option value="">-</option>
+													<option value="1">Manufacturing</option>
+													<option value="1">Shipping</option>
+													<option value="1">Administration</option>
+													<option value="1">Human Resources</option>
+												</select>
+											</div>
+											<div class="field half">
+												<input type="radio" id="demo-priority-low" name="demo-priority" checked>
+												<label for="demo-priority-low">Low</label>
+											</div>
+											<div class="field half">
+												<input type="radio" id="demo-priority-high" name="demo-priority">
+												<label for="demo-priority-high">High</label>
+											</div>
+											<div class="field half">
+												<input type="checkbox" id="demo-copy" name="demo-copy">
+												<label for="demo-copy">Email me a copy</label>
+											</div>
+											<div class="field half">
+												<input type="checkbox" id="demo-human" name="demo-human" checked>
+												<label for="demo-human">Not a robot</label>
+											</div>
+											<div class="field">
+												<label for="demo-message">Message</label>
+												<textarea name="demo-message" id="demo-message" placeholder="Enter your message" rows="6"></textarea>
+											</div>
+										</div>
+										<ul class="actions">
+											<li><input type="submit" value="Send Message" class="primary" /></li>
+											<li><input type="reset" value="Reset" /></li>
+										</ul>
+									</form>
+								</div>
+							</section>
+
+						</div>
+					</section>
+				-->
+
+				<!-- Section -->
+					<!-- <section>
+						<header>
+							<h2>Get in touch</h2>
+						</header>
+						<div class="content">
+							<p><strong>Auctor commodo</strong> interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis dolor imperdiet dolor mattis sagittis.</p>
+							<form>
+								<div class="fields">
+									<div class="field half">
+										<input type="text" name="name" id="name" placeholder="Name" />
+									</div>
+									<div class="field half">
+										<input type="email" name="email" id="email" placeholder="Email" />
+									</div>
+									<div class="field">
+										<textarea name="message" id="message" placeholder="Message" rows="7"></textarea>
+									</div>
+								</div>
+								<ul class="actions">
+									<li><input type="submit" value="Send Message" class="button primary" /></li>
+								</ul>
+							</form>
+						</div>
+						<footer>
+							<ul class="items">
+								<li>
+									<h3>Email</h3>
+									<a href="#">information@untitled.ext</a>
+								</li>
+								<li>
+									<h3>Phone</h3>
+									<a href="#">(000) 000-0000</a>
+								</li>
+								<li>
+									<h3>Address</h3>
+									<span>1234 Somewhere Road, Nashville, TN 00000</span>
+								</li>
+								<li>
+									<h3>Elsewhere</h3>
+									<ul class="icons">
+										<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
+										<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
+										<li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+										<li><a href="#" class="icon brands fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
+										<li><a href="#" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+										<li><a href="#" class="icon brands fa-codepen"><span class="label">Codepen</span></a></li>
+									</ul>
+								</li>
+							</ul>
+						</footer>
+					</section> -->
+
+				<!-- Copyright -->
+				<footer>
+					<section>
+					<!-- <a href="../index.html" style="margin-left: 25%; "class="  "><strong>Back to Projects</strong></a> -->
+
+						<div class="copyright">&copy; Untitled. All rights reserved. Design: <a href="https://html5up.net">HTML5 UP</a>.
+							<a href="../index.html"  class="  "><strong>Back to Projects</strong></a>
+						</div>
+ 		`			</section>
+				</footer>
+			</div>
+
+		<!-- Scripts -->
+			<script src="../assets/js/jquery.min.js"></script>
+			<script src="../assets/js/jquery.scrolly.min.js"></script>
+			<script src="../assets/js/browser.min.js"></script>
+			<script src="../assets/js/breakpoints.min.js"></script>
+			<script src="../assets/js/util.js"></script>
+			<script src="../assets/js/main_projects.js"></script>
+
+	</body>
+</html>
