@@ -86,6 +86,8 @@
 						</header>
 						<div class="content">
 							<p> Camping, hiking, and other outdoor events often take place in areas with weak cell signal. Explorers could benefit from a <strong>communication device</strong> that uses an independent channel to operate without external infrastructure. The device should enable <strong>peer-to-peer communication</strong>, wayfinding, and emergency messaging. In addition, users who receive a message should be able to navigate to the sender, allowing people to find eachother in the wilderness.</p>
+							<p> <small> (Hint: click on the thumbnails to view the full image) </small>  </p>
+
 							<span class="image main"><img src="images/beacon/V1_designoverview.png" alt="" /></span>
 						</div>
 					</section>
@@ -106,7 +108,7 @@
 										
 										<p class="gold"> The first schematic contains the ESP 32 and support circuitry. I used a tag-connect TC-2030 for the serial port. The USB C port is only used for charging. As the original ESP32 lacks native USB support, omitting USB serial saves a USB-UART bridge chip, reducing production costs. Finally, a magnetic buzzer provides an indication that a message has been received.</p>
 										
-										<p class="gold"> The second schematic shows the UI components, consisting of 5x Cherry MX mechanical keyswitches, one quadrature encoder, and supporting components. The ENTER button requires a pull-up resistor because the ESP32's IO34 pin lacks a built-in pull-up.</p>
+										<p class="gold"> The second schematic shows the user input components, consisting of 5x Cherry MX mechanical keyswitches, one quadrature encoder, and supporting components. The ENTER button requires a pull-up resistor because the ESP32's IO34 pin lacks a built-in pull-up.</p>
 
 										<p class="gold"> The third schematic contains the indication LEDs. 30 WS2812B-compatible LEDs provide feedback to the user. Most of these are arranged in a ring around the screen, forming a digital compass. This allows the compass to point in any direction, allowing the user to navigate to the source of a message.</p>
 
@@ -126,8 +128,8 @@
 								<!-- Section -->
 								<section>
 									<header>
-										<h3>Board Layout</h3>
-										<p class="gold">The PCB's shape was chosen to be approximately rectangular with a cutout in the top right where the lithium battery would be installed. To save on development time for this first prototype, several breakout boards were used for sensors in this project. </p>
+										<h3>Board Design</h3>
+										<p class="gold">The PCB's shape was chosen to be approximately rectangular with a cutout in the top right where the lithium battery would be installed. To save on development time for this first prototype, several breakout boards were used for sensors in this project. It is a 4-layer board, to provide a ground plane under RF traces.</p>
 										
 										<p class="gold">The top of the PCB hosts the ESP32 microcontroller, a level shifter IC, OLED screen breakout, battery charging circuit, DC-DC converter, and all SMT components. The SMT components in this board were populated by JLCPCB's assembly service.</p> 
 										
@@ -174,7 +176,6 @@
 						<div class="content">
 							<p> <strong>With the hardware designed</strong>, the next step is board bring up. This is an important part of hardware development and involves testing the prototype hardware to ensure it functions as intended. </p>
 																					
-							<p> <small> (Hint: click on the thumbnails to view the full image) </small>  </p>
 							<!-- Section -->
 								<section>
 									<header>

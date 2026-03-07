@@ -85,15 +85,18 @@
 							<h2>Background</h2>
 						</header>
 						<div class="content">
-							<p> Camping, hiking, and other outdoor events often take place in areas with weak cell signal. Explorers could benefit from a <strong>communication device</strong> that uses an independent channel to operate without external infrastructure. The device should enable <strong>peer-to-peer communication</strong>, wayfinding, and emergency messaging. In addition, users who receive a message should be able to navigate to the sender, allowing people to find eachother in the wilderness.</p>
-							<span class="image main"><img src="images/beacon/V1_designoverview.png" alt="" /></span>
+							<p> Last year, I built and user tested an off-grid communicator for outdoor situations without cell service. Overall, the tests of the device looked promising. However, the test also identified some areas for improvement. </p>
+							<p>It is time to design <strong>Version 2</strong> of the Celestial Navigator.</p>
+							<p> <small> (Hint: click on the thumbnails to view the full image) </small>  </p>
+
+							<span class="image main"><img src="images/beacon/CAD_beacon_V2_overview.png" alt="" /></span>
 						</div>
 					</section>
 
 				<!-- Section first steps-->
 					<section>
 						<header>
-							<h2>Hardware Design</h2>
+							<h2>Hardware Design Changes</h2>
 						</header>
 						<div class="content">
 							<p>The design of this off-grid communicator involved balancing factors across <strong>several disciplines of engineering</strong>. The 3D printed case needed to be robust and easily manufacturable. The electronic hardware required a custom PCB to connect from the myriad of IO devices, in a small and portable form-factor. The industrial design should be intuitive for new users, and should't require much explaining or manual-reading.   </p>
@@ -102,40 +105,40 @@
 								<section>
 									<header>
 										<h3>Electronics Design</h3>
-										<p class="gold"> The electrical hardware design comprises a mainboard that connects breakout boards, switches, and indicators to an Espressif ESP-32 microcontroller. The board also includes a battery charger and a DC-DC converter.</p>
+										<p class="gold"> The electrical hardware design has much in common with Version 1. The biggest changes include integrating compass, accellerometer, and GPS sensors in the PCB design rather than using external breakout boards. This allows for a thinner, more robust, and more manufacturable design. The soft power switch from Version 1 was also eliminated for simplicity, cost, and ease of use.</p>
 										
-										<p class="gold"> The first schematic contains the ESP 32 and support circuitry. I used a tag-connect TC-2030 for the serial port. The USB C port is only used for charging. As the original ESP32 lacks native USB support, omitting USB serial saves a USB-UART bridge chip, reducing production costs. Finally, a magnetic buzzer provides an indication that a message has been received.</p>
+										<p class="gold"> The first schematic contains the ESP 32 and support circuitry. The second schematic shows the user input components: the switches and knob. Almost nothing about these sheets changed from version 1.</p>
 										
-										<p class="gold"> The second schematic shows the UI components, consisting of 5x Cherry MX mechanical keyswitches, one quadrature encoder, and supporting components. The ENTER button requires a pull-up resistor because the ESP32's IO34 pin lacks a built-in pull-up.</p>
+										<p class="gold"> The third schematic contains the indication LEDs. The main change was the addition of side-firing LEDs for the flashlight. Version 1 had a flashlight, but it wasn't very effective due to using up-firing LEDs with a makeshift reflector.</p>
 
-										<p class="gold"> The third schematic contains the indication LEDs. 30 WS2812B-compatible LEDs provide feedback to the user. Most of these are arranged in a ring around the screen, forming a digital compass. This allows the compass to point in any direction, allowing the user to navigate to the source of a message.</p>
+										<p class="gold"> The fourth schematic sheet contains the sensors and RF components. External breakout boards have been eliminated and all sensors are now integrated on the Navigator's PCB.</p>
 
-										<p class="gold"> The fourth schematic describes the module and sensor connections of the device. These include a magnetometer (compass), a GPS receiver, a 128x32 pixel OLED screen, and a SX-1276-based LoRa modem. </p>
-
-										<p class="gold"> The final schematic contains the power management circuitry. A TI TPS61088-based boost converter steps the 3.7V lithium battery voltage to the 5V required by the WS2812B LEDs. A pair of P-FETs act as an ideal diode to allow the system to swap between 5V USB power and the onboard battery.</p>
+										<p class="gold"> The final schematic contains the power management circuitry. The TI TPS61088-based boost converter is still present. A TI BQ29700-based battery protection circuit is implemented to avoid overdischarging the lithium battery. Version 1 had a soft power button and software-controlled battery management, so it could shut itself down if the battery voltage dropped too low. Since Version 2 eliminates the soft power button for simplicity, a hardware solution for battery protection was needed.</p>
 									</header>
 									<div class="content">
 										<div class="gallery">
-											<a id="dynamicProjectImage" href="images/beacon/Beacon_ESP32.png" class="landscape" ><img src="images/beacon/Beacon_ESP32.png" alt="" /></a>
-											<a id="dynamicProjectImage" href="images/beacon/Beacon_Digital_IO.png" class="landscape" ><img src="images/beacon/Beacon_Digital_IO.png" alt="" /></a>
-											<a id="dynamicProjectImage" href="images/beacon/Beacon_LEDs.png" class="landscape" ><img src="images/beacon/Beacon_LEDs.png" alt="" /></a>
-											<a id="dynamicProjectImage" href="images/beacon/Beacon_Modules.png" class="landscape"><img src="images/beacon/Beacon_Modules.png" alt="" /></a>
-											<a id="dynamicProjectImage" href="images/beacon/Beacon_Power_Core.png" class="landscape" ><img src="images/beacon/Beacon_Power_Core.png" alt="" /></a>										</div>
+											<a id="dynamicProjectImage" href="images/beacon/BeaconV2_ESP32.png" class="landscape" ><img src="images/beacon/BeaconV2_ESP32.png" alt="" /></a>
+											<a id="dynamicProjectImage" href="images/beacon/BeaconV2_Digital_IO.png" class="landscape" ><img src="images/beacon/BeaconV2_Digital_IO.png" alt="" /></a>
+											<a id="dynamicProjectImage" href="images/beacon/BeaconV2_LEDs.png" class="landscape" ><img src="images/beacon/BeaconV2_LEDs.png" alt="" /></a>
+											<a id="dynamicProjectImage" href="images/beacon/BeaconV2_Modules.png" class="landscape"><img src="images/beacon/BeaconV2_Modules.png" alt="" /></a>
+											<a id="dynamicProjectImage" href="images/beacon/BeaconV2_Power_Core.png" class="landscape" ><img src="images/beacon/BeaconV2_Power_Core.png" alt="" /></a>										</div>
 									</div>
 								</section>
 								<!-- Section -->
 								<section>
 									<header>
-										<h3>Board Layout</h3>
-										<p class="gold">The PCB's shape was chosen to be approximately rectangular with a cutout in the top right where the lithium battery would be installed. To save on development time for this first prototype, several breakout boards were used for sensors in this project. </p>
+										<h3>Board Design</h3>
+										<p class="gold">The PCB layout is similar to version 1's layout. Major changes include the 18650 battery mount. V2 has a battery holder that enables hotswapping batteries, where V1's battery was soldered in place. V2 also incorporates a physical power switch, a battery protection circuit, and a soldered-down GPS module.  </p>
 										
-										<p class="gold">The top of the PCB hosts the ESP32 microcontroller, a level shifter IC, OLED screen breakout, battery charging circuit, DC-DC converter, and all SMT components. The SMT components in this board were populated by JLCPCB's assembly service.</p> 
+										<p class="gold">The only component that is still implemented as a breakout board is the OLED screen, which has doubled in size from V1, measuring 128x64 pixels (MID). There also is an option for a 128x128 pixel OLED (BIG). </p> 
 										
-										<p class="gold">On the bottom of the PCBA, breakout boards for the compass IC, GPS receiver, and LoRa modem can be found. Having breakout boards connected via 2.54mm headers on both sides of the PCBA made the entire assembly approximately 15mm thick.</p> 
+										<p class="gold">Like version 1, this is a 4 layer board. The top mostly has traces running left-to-right, and the bottom mostly top-to-bottom. This project has been very helpful for leveling up my PCB design skills, and the resulting PCB is much cleaner than Version 1's board.</p> 
 									</header>
 									<div class="content">
 										<div class="gallery">
-											<a id="dynamicProjectImage" href="images/beacon/V1_PCB_bothsides.png" class="landscape"><img src="images/beacon/V1_PCB_bothsides.png" alt="" /></a>
+											<a id="dynamicProjectImage" href="images/beacon/V2_PCB_bothsides.png" class="landscape"><img src="images/beacon/V2_PCB_bothsides.png" alt="" /></a>
+											<a id="dynamicProjectImage" href="images/beacon/V2_PCB_bothsides.png" class="landscape"><img src="images/beacon/V1_PCB_bothsides.png" alt="" /></a>
+
 											
 										</div>
 									</div>
@@ -145,17 +148,17 @@
 								<section>
 									<header>
 										<h3>Mechanical Design</h3>
-										<p class="gold">A clamshell of 3D printed plastic (shown as gray) encased the PCB (the purple form) and provided some internal protection to the PCB and 18650-sized lithium battery (green cylinder).  </p>
+										<p class="gold">V2's physical design shares some commonality with V1. The gray case that fits around the PCBA uses a similar design, and the "shield" pieces printed in an accent color are used again for this project.   </p>
 										
-										<p class="gold">A "shield" printed in an accent color (red in this case) covered the lithium battery, the GPS antenna, and the power switch. This also helped hold the clamshell together. To save assembly costs, a single screw connects the two halves of the "shield" together.  </p>
+										<p class="gold">Where the design starts diverging is the antenna mount. Where V1 used an unconstrained rubber duck antenna, V2 constrains the antenna in a hinged mounting clip. This is designed to keep the antenna upgright using gravity. If the antenna stays upright with respect to the ground, it will perform much better than V1's antenna. </p>
 										
-										<p class="gold">The final design is rather rigid and robust. A translucent ring surrounds the screen bezel, and allows LEDs mounted on the PCB in a compass ring to be viewed through the plastic enclosure. </p>
+										<p class="gold">The version 2 also contains a clip over the programming port, allowing access without dismantling the device and a battery door to enable 18650 battery hot-swapping. </p>
 									</header>
 									<div class="content">
 										<div class="gallery">
-											<a id="dynamicProjectImage" href="images/beacon/CAD_beacon_overview.png" class="landscape"><img src="images/beacon/CAD_beacon_overview.png" alt="" /></a>
+											<a id="dynamicProjectImage" href="images/beacon/CAD_beacon_V2_overview.png" class="landscape"><img src="images/beacon/CAD_beacon_V2_overview.png" alt="" /></a>
 
-											<a id="dynamicProjectImage" href="images/beacon/CAD_beacon_exploded.png" class="landscape"><img src="images/beacon/CAD_beacon_exploded.png" alt="" /></a>
+											<a id="dynamicProjectImage" href="images/beacon/CAD_beacon_V2_exploded.png" class="landscape"><img src="images/beacon/CAD_beacon_V2_exploded.png" alt="" /></a>
 											
 										</div>
 									</div>
@@ -172,10 +175,10 @@
 							<h2>Board Bring-up</h2>
 						</header>
 						<div class="content">
-							<p> <strong>With the hardware designed</strong>, the next step is board bring up. This is an important part of hardware development and involves testing the prototype hardware to ensure it functions as intended. </p>
+							<p> Board bring-up was extremely fast on this iteration, as it shared much of its design with the already <strong>battle-tested version 1</strong>. </p>
 																					
-							<p> <small> (Hint: click on the thumbnails to view the full image) </small>  </p>
-							<!-- Section -->
+							
+							<!-- Section 
 								<section>
 									<header>
 										<h3>Bring-up</h3>
@@ -194,7 +197,7 @@
 
 										</div>
 									</div>
-								</section>
+								</section>-->
 
 					
 
@@ -208,39 +211,38 @@
 							<h2>Prototype Run and User Testing</h2>
 						</header>
 						<div class="content">
-							<p>The hardware is working, but now the product itself must be <strong>tested with actual users</strong>. 30 Celestial Navigator prototypes, consisting of functional PCBAs and 3D printed enclosures, were manufactured.</p>
+							<p>Once again, the project must be <strong>tested with actual users</strong>. 30 Celestial Navigator V2 prototypes, consisting of functional PCBAs and 3D printed enclosures, were manufactured.</p>
 
-							<p>All 3D printing, through-hole soldering, and final assembly was done in-house.</p>
+							<p>The V1 Celestial Navigators from last test were also deployed. Prototyping is expensive, it would be a shame to not reuse the old devices.</p>
+
+							<p>All 3D printing, through-hole soldering, and final assembly was done in-house. </p>
 							<!-- Section -->
 								<section>
 									<header>
 										<h3>User Testing</h3>
-										<p class="gold">The Celestial Navigator has cyberpunk styling and a robust 3D-printed case. The first image in this section is an actual picture of one of the 30 prototypes used in user testing.</p>
+										<p class="gold">The Celestial Navigator V2 continues the pattern of cyberpunk-inspired industrial design. The first picture shows one of the 30 prototypes used in user testing, sending an SOS message. Luckily, nobody in testing needed this feature!</p>
 
-										<p class="gold">The 30 prototypes were deployed at a camping event. Users were given a brief crash course on the UI and then released into the wild wielding their communicator. </p>
-										
-										<p class="gold">The event lasted 4 days, and consisted of camping, hiking, and climbing. Weather included rain and shine, and temperatures ranging from 40F to 80F. Most people walked between 2 and 10 miles per day, and had the Celestial Navigator on for 8 hours each day.</p>
-										
-										<p class="gold">Multiple mounting options were provided, from wrist mount to caribiner clip. Most users opted for the caribiner clip, hanging the device from a backpack strap. In use, the user could rotate the device up to view the screen. </p>
-										
-										<p class="gold">Users praised the UI and tactile experience of using the Navigator, as well as the LED indication and functionality. </p>
-										
-										<p class="gold">The number one problem identified was the Antenna. The rubber duck antenna we used was adjustable, and was free to rotate as the user walked. A monopole antenna radiates in a toroidal pattern, with the peak radiation perpendicular to the axis of the antenna. This means that if our antenna is jostled into an orientation that is not perpendicular to the ground, it won't be as effective. </p>
+										<p class="gold">The 30 prototypes were deployed at a camping event. Users were again given a brief crash course on the UI and then released into the wild wielding their communicator. The simplicity of the interface meant that people who used the device last year didn't need a refresher. </p>
+																				
+										<p class="gold">The caribiner clip was pushed as the dominant attachment method, as it enables the antenna to be properly positioned. At the event, I noticed that the antenna clip had the desired effect. Antennas of Navigators remained pointed at the sky, the optimal pointing for a monopole rubber duck. Subjective range appeared vastly greater than the V1 test. </p>
+																				
+										<p class="gold">The number one problem identified was once again the Antenna. Though the caribiner clip worked, the rotating antenna added significant mechanical complexity and failure points. Some of the SMA cables came undone due to vibration. The design was also more difficult to assemble than I'd like. </p>
 
-										<p class="gold">Overall, the Celestial Navigator performed very well on the first test run. No devices failed during operation, and users were pleased with the functionality. Still, I believed we could do better, and immediately started working on <strong class = "gold"><a class="gold" href="beacon_V2.html"> Version 2 of the Celestial Navigator</a></strong></strong>.</p>
+										<p class="gold">Version 2 of the Navigator worked even better than Version 1, but I am apparently never satisfied with my projects, so it is time for <strong class = "gold"><a class="gold" href="beacon_V3.html"> Version 3 of the Celestial Navigator</a></strong></strong>!</p>
 
 									</header>
 									<div class="content">
 										<div class="gallery">
-											<a id="dynamicProjectImage" href="images/beacon/beacon_assembled.jpg" class="landscape"><img src="images/beacon/beacon_assembled.jpg" alt="" /></a>
-											<a id="dynamicProjectImage" href="images/beacon/beacon_worn_on_backpack.png" class="landscape"><img src="images/beacon/beacon_worn_on_backpack.png" alt="" /></a>
+											<a id="dynamicProjectImage" href="images/beacon/beacon_V2_SOS.png" class="landscape"><img src="images/beacon/beacon_V2_SOS.png" alt="" /></a>
+											<a id="dynamicProjectImage" href="images/beacon/Beacon_V2_dooropen.png" class="landscape"><img src="images/beacon/Beacon_V2_dooropen.png" alt="" /></a>
 											<a id="dynamicProjectImage" href="images/beacon/radiation_pattern_monopole.png" class="landscape"><img src="images/beacon/radiation_pattern_monopole.png" alt="" /></a>
+											<a id="dynamicProjectImage" href="images/beacon/beaconV2_worn_on_backpack.png" class="landscape"><img src="images/beacon/beaconV2_worn_on_backpack.png" alt="" /></a>
 
-											<a id="dynamicProjectImage" >
+										<!-- 	<a id="dynamicProjectImage" >
 												<video id="dynamicProjectImage" width="1000" height="500" controls>
 													<source src = "images/beacon/beacon_v1_whitebg.mp4" type="video/mp4">
 												</video>
-											</a>
+											</a> -->
 										</div>
 									</div>
 								</section>
