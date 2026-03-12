@@ -6,7 +6,7 @@
 -->
 <html>
 	<head>
-		<title>Projects - 2304A UI Upgrade - Larry Kresse</title>
+		<title>Projects - Tesseract 3D Display - Larry Kresse</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<meta name="description" content="" />
@@ -68,14 +68,14 @@
 					
 						<header>
 							
-							<h1>Keithley 2304A UI Upgrade</h1>
-							<p class="gold_always">An aftermarket upgrade for a 30-year old Power Supply <!--a href="https://twitter.com/ajlkn">@ajlkn</a> / <a href="https://html5up.net">HTML5 UP</a></p-->
+							<h1>Tesseract 3D Display</h1>
+							<p class="gold_always">100lbs of spinning electromechanical components make for an interesting volumetric display <!--a href="https://twitter.com/ajlkn">@ajlkn</a> / <a href="https://html5up.net">HTML5 UP</a></p-->
 							<ul class="actions">
 <!-- 								<li><a href="#first" class="arrow back_arrow"><span class="label">Next</span></a></li>
  -->							</ul>
 						</header>
 						<div class="content">
-							<span class="image fill" data-position="center"><img src="images/psu_ui/bring_up_front.jpg" alt="" /></span>
+							<span class="image fill" data-position="center"><img src="images/tesseract/MkII/assembled-off.png" alt="" /></span>
 						</div>
 					</section>
 
@@ -85,8 +85,10 @@
 							<h2>Background</h2>
 						</header>
 						<div class="content">
-							<p><strong>The Keithley 2304A </strong> is a decent high-speed benchtop power supply. A two-quadrant supply, the unit can output between 0 and 20 volts, source up to 5 amps, and sink up to 3 amps. It is suitable for testing battery-powered communication devices due to its 40uS recovery time after a large load change. They were also made for years, and can be bought for quite cheaply secondhand. The problem? <strong> The UI is borderline unusable. </strong> The buttons are spongy and hard-to-press, and the 90s-era LCD can only be viewed from head-on. Time for an upgrade.</p>
-							<span class="image main"><img src="images/psu_ui/originalUI.jpg" alt="" /></span>
+							<p>I've been interested in <strong><a href="https://en.wikipedia.org/wiki/Persistence_of_vision">Persistence-of-Vision</a>-based displays</strong> for years. You may be familiar with the LED fan displays used in advertising and other signage. They consist of an LED strip mounted on a fan blade. As the blade spins, the LEDs rapidly change color--resulting in an image being displayed in midair. </p>
+
+							<p>The appearance of these LED fan displays is similar to a sci-fi hologram, and most people agree that they look very cool. I wanted to build one, but I felt like this technology could use another dimension. So I began work on the Tesseract 3D display, which is essentially a stack of these 2D advertising displays. </p>
+							<span class="image main"><img src="images/tesseract/MkI/CAD_early_mockup.png" alt="" /></span>
 						</div>
 					</section>
 
@@ -96,22 +98,83 @@
 							<h2>First Steps</h2>
 						</header>
 						<div class="content">
-							<p><strong>The basic design</strong> chosen takes advantage of a built-in feature of the 2304A: the Remote Display Option. Because the 2304A was intended to be mounted in test racks far from your bench, it could be controlled with a remote UI that plugs into the back panel of the unit. Unfortunately, little information about this Remote Display exists, so reverse-engineering of the system is necessary.  </p>
+							<p><strong>The initial design</strong> was inspired by a cocktail arcade cabinet. 4 Josticks and buttons allow 4 players to interact with a game running on the 3D display. A polycarbonate dome protects the users from the rapidly-spinning stack of LED blades. </p>
+
+							<p>An important step in constructing anything complicated is diagramming the <strong>functionality and system architecture.</strong> This helps me catch design oversights before I touch a CAD program or spare parts drawer. </p>
+
 
 							<!-- Section -->
 								<section>
 									<header>
-										<h3>Reverse Engineering</h3>
-										<p class="gold">Through tracing the serial port pins from the original UI microcontroller, through a RS-232 IC, and to the power supply's mainboard, I learned what pins to probe to view the communication traffic. </p>
+										<h3>General design</h3>
+										<p class="gold">The Tesseract has 2 main components: the spinning side and the static side. The spinning side contains the LEDs which are spun to create the visual effect of solid 3D images. The static side contains power supplies, controllers, and mechanical mounting components needed to power, control, and protect the spinning side.</p>
 										
-										<p class="gold">After that, it was as simple as setting the oscilloscope to Serial one-shot trigger. By recording the values transmitted, I determined that each key press results in a character being sent across the RS-232 bus.  </p>
+										<p class="gold">Each LED blade consists of an <a class="gold" href="https://www.espressif.com/en/products/socs/esp32-s3">ESP32-S3-based</a> embedded sysystem and 180 RGB LEDs. The LED blades are controlled over SPI, and also accept a SYNC signal that is generated when the spinning side passes a "flag" on the static side.  </p>
 										
-										<p class="gold">A bit more reverse-engineering revealed that the full text shown on the display (plus a few control characters) is sent after each key press. </p>
+										<p class="gold">A brushless motor and a <a class="gold" href="https://vesc-project.com/">VESC controller</a> intended for electric bike applications provides the torque needed to spin up the display. </p>
+
+										<p class="gold">A custom slip ring transfers power between the static side and the spinning side via a set of graphite brushes. </p>
+
+										<p class="gold">Expecting the slip ring to be electrically noisy, I opted for a wireless control scheme for transmitting data from the static to spinning side. </p>
+
 									</header>
 									<div class="content">
 										<div class="gallery">
-											<a id="dynamicProjectImage" href="images/psu_ui/reverse_engineer_rs232.jpg" class="landscape"><img src="images/psu_ui/reverse_engineer_rs232.jpg" alt="" /></a>
-											
+											<a id="dynamicProjectImage" href="images/tesseract/MkI/tesseract-overview.png" class="landscape"><img src="images/tesseract/MkI/tesseract-overview.png" alt="" /></a>
+											<a id="dynamicProjectImage" href="images/tesseract/MkI/Tesseract-BlockDiagram.jpg" class="landscape"><img src="images/tesseract/MkI/Tesseract-BlockDiagram.jpg" alt="" /></a>
+
+										</div>
+									</div>
+								</section>
+
+							<!-- Section -->
+								<section>
+									<header>
+										<h3>LED Fan Blade Layout</h3>
+										<p class="gold">The intial arcade-inspired display mockup also included this LED fan blade layout: 12 stacks of blades are attached to a central axis. </p>
+										
+										<p class="gold">This design provided some space between the LED blades, allowing LEDs in deeper parts of the display volume to be visible.  </p>
+										
+										<p class="gold">In practice, I didn't really like this design. The opaque LED blade PCBs would block too many of the LEDs from other spinning blades. </p>
+
+										<p class="gold">I used <a class="gold" href="https://openscad.org/">OpenSCAD</a> to make a few animated mockups, showing what the LED fan stack would look like through a full rotation. Then, I picked a layout that seemed to provide a good viewing angle to all LED blade layers. </p>
+
+										<p class="gold">The yellow layout in the animation is what I settled on, and I am pretty happy with how the spiral layout preserves much of the viewing angles of LED strips deep in the display.  </p>
+
+									</header>
+									<div class="content">
+										<div class="gallery">
+											<a id="dynamicProjectImage" href="images/tesseract/MkI/CAD_early_LED_layout.png" class="landscape"><img src="images/tesseract/MkI/CAD_early_LED_layout.png" alt="" /></a>
+											<a id="dynamicProjectImage" href="images/tesseract/MkI/CAD_Design_spiralsim.gif" class="landscape"><img src="images/tesseract/MkI/CAD_Design_spiralsim.gif" alt="" /></a>
+
+										</div>
+									</div>
+								</section>
+
+								<!-- Section -->
+								<section>
+									<header>
+										<h3>Dome sweet dome</h3>
+										<p class="gold">With the initial design figured out, I promptly ran into sourcing problems. In order for this to be remotely safe, a polycarbonate dome needs to cover the spinning LED blades.</p>
+										
+										<p class="gold">And, a custom polycarbonate dome of the size I planned would cost nearly $1000. Acrylic is more common, cheaper, and more transparent, but often shatters under impact--not ideal for this use case!</p>
+										
+										<p class="gold">I ended up finding a solution in an unlikely place: the old Cyclone arcade game. I bought a cyclone machine from an arcade game warehouse, <a class="gold" href="https://www.facebook.com/DaytonArcadesAndMore/">Dayton Arcades and More.</a>  </p>
+
+										<p class="gold">That solved the dome sourcing issue, but now I had to redesign the device. Scaling up my arcade cabinet design to fit this massive dome would mean a huge cabinet, and I do need this to be movable for travel. </p>
+
+										<p class="gold">Combining the new spiral LED layout and new (to me) dome, I quickly designed a new circular cabinet, with weight-reducing speed holes. In the last image of this section's gallery, you can also see the slip ring mockup, planned motor placement, and twin LED fan blade supports. The body of the cabinet will be made out of 3/4" plywood, and is designed to slot together for easily assembly. </p>
+
+									</header>
+									<div class="content">
+										<div class="gallery">
+											<a id="dynamicProjectImage" href="images/tesseract/MkI/cyclone.jpg" class="landscape"><img src="images/tesseract/MkI/cyclone.jpg" alt="" /></a>
+											<a id="dynamicProjectImage" href="images/tesseract/MkI/tesseract_dome-cyclone.png" class="landscape"><img src="images/tesseract/MkI/tesseract_dome-cyclone.png" alt="" /></a>
+											<a id="dynamicProjectImage" href="images/tesseract/MkI/CAD_Design_V1_overview.png" class="landscape"><img src="images/tesseract/MkI/CAD_Design_V1_overview.png" alt="" /></a>
+											<a id="dynamicProjectImage" href="images/tesseract/MkI/CAD_Design_V1_side.png" class="landscape"><img src="images/tesseract/MkI/CAD_Design_V1_side.png" alt="" /></a>
+
+
+
 										</div>
 									</div>
 								</section>
