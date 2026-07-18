@@ -1,8 +1,9 @@
 # Rev B design system — "LKR-2026"
 
-This document defines the **Rev B** PCB design language used by `index2.html` and
-`projects/tesseract_v1_2.html`. Use it when migrating the remaining project pages
-(`psu_ui.html`, `beacon_V1–V3.html`, …) so every page reads as one fab run.
+This document defines the **Rev B** PCB design language used by the live site:
+`index.html` (the promoted Rev B landing page) and the `_2`-suffixed project
+pages. The Rev A originals are archived with an `_old` suffix. Use this
+reference when adding new pages so everything reads as one fab run.
 
 The conceit: every page is a printed circuit board. The page body is the solder
 mask, chrome is silkscreen, accents are exposed copper/ENIG gold, and the footer
@@ -23,7 +24,7 @@ Declared as CSS custom properties in `:root` on every page:
     --gold:        #d9b25f;  /* ENIG gold: links, pads, button borders */
     --gold-bright: #ecd9a0;  /* headings, strong text, hover states */
     --silk:        #e8e6df;  /* silkscreen white — primary body text */
-    --silk-dim:    #cfd4c9;  /* secondary body text (on green; index2 uses #a9aaa2) */
+    --silk-dim:    #cfd4c9;  /* secondary body text (on green; the landing page uses #a9aaa2) */
     --led-green:   #4cd964;  /* status LED only */
     --mono:        "Courier New", Courier, monospace;
     --heading:     "Raleway", Helvetica, sans-serif;
@@ -81,7 +82,7 @@ Fixed furniture, top to bottom:
   on the landing page; `MOD.xx — <descriptor>` on project pages.
 - **Hero nav** — `.pad-link` buttons: mono, copper 1px border, transparent fill;
   hover inverts to solid gold with green text. Project pages include
-  `← Main Board` (to `../index2.html`).
+  `← Main Board` (to `../index.html`).
 - **Section separators** — `1px dashed rgba(200, 138, 60, 0.35)`.
 - **Section headers** (`.sec-head`) — mono sheet number + Raleway h2 + a dashed
   copper rule stretching to the right margin.
@@ -106,15 +107,15 @@ jQuery/template scripts. Only external deps are Font Awesome
 ## 4. MOD numbering
 
 Project pages carry the module designator assigned by their card on the
-`index2.html` "Assembly Modules" section:
+`index.html` "Assembly Modules" section:
 
 | Designator | Project              | Rev A page                  | Rev B page                    |
 | ---------- | -------------------- | --------------------------- | ----------------------------- |
-| `MOD.01`   | Tesseract 3D Display | `projects/tesseract_v1.html`| `projects/tesseract_v1_2.html`|
-| `MOD.02`   | Keithley 2304A UI    | `projects/psu_ui.html`      | `projects/psu_ui_2.html`      |
-| `MOD.03`   | Celestial Navigator  | `projects/beacon_V3.html`   | `projects/beacon_V3_2.html`   |
-| `MOD.03-V1`| Celestial Navigator V1 (history) | `projects/beacon_V1.html` | `projects/beacon_V1_2.html` |
-| `MOD.03-V2`| Celestial Navigator V2 (history) | `projects/beacon_V2.html` | `projects/beacon_V2_2.html` |
+| `MOD.01`   | Tesseract 3D Display | `projects/tesseract_v1_old.html`| `projects/tesseract_v1_2.html`|
+| `MOD.02`   | Keithley 2304A UI    | `projects/psu_ui_old.html`      | `projects/psu_ui_2.html`      |
+| `MOD.03`   | Celestial Navigator  | `projects/beacon_V3_old.html`   | `projects/beacon_V3_2.html`   |
+| `MOD.03-V1`| Celestial Navigator V1 (history) | `projects/beacon_V1_old.html` | `projects/beacon_V1_2.html` |
+| `MOD.03-V2`| Celestial Navigator V2 (history) | `projects/beacon_V2_old.html` | `projects/beacon_V2_2.html` |
 
 The designator appears in three places on a project page: the board legend, the
 hero refdes line, and (on the landing page) the module card. New projects take
@@ -138,18 +139,22 @@ fab drawing:
 
 ## 6. File conventions
 
-- Rev B pages live **alongside** their Rev A originals with a `_2` suffix
-  (`index2.html`, `tesseract_v1_2.html`); originals are left untouched.
-- Every Rev B page cross-links: project pages → `../index2.html` ("Main Board")
-  and their own Rev A; the landing page footer → `index.html` ("View Rev A").
+- The Rev B landing page is `index.html` (promoted from `index2.html`);
+  Rev B project pages carry a `_2` suffix (`tesseract_v1_2.html`). The Rev A
+  originals are archived alongside with an `_old` suffix (`index_old.html`,
+  `tesseract_v1_old.html`) and keep working links within the old set.
+- Every Rev B page cross-links: project pages → `../index.html` ("Main Board");
+  landing-page module cards → the `_2` project pages. "View Rev A" links to the
+  `*_old.html` archives exist on every page but are commented out in the markup —
+  uncomment to re-enable.
 - Asset paths from `projects/` are relative: `images/…` for project photos,
   `../assets/…` for shared assets.
 
 ## 7. Known content gotcha
 
-`projects/tesseract_v1.html` (Rev A) contains three trailing sections
+`projects/tesseract_v1_old.html` (Rev A) contains three trailing sections
 ("Electronic Hardware Design", "Board Bring-up…", "Bonus content: project case
-assembly") that are duplicated from `psu_ui.html` and are not about the
+assembly") that are duplicated from `psu_ui_old.html` and are not about the
 Tesseract. The Rev B Tesseract page intentionally omits them. When migrating
 other Rev A pages, check for similar copy-paste leftovers before carrying
 content over.
