@@ -113,6 +113,8 @@ Project pages carry the module designator assigned by their card on the
 | `MOD.01`   | Tesseract 3D Display | `projects/tesseract_v1.html`| `projects/tesseract_v1_2.html`|
 | `MOD.02`   | Keithley 2304A UI    | `projects/psu_ui.html`      | `projects/psu_ui_2.html`      |
 | `MOD.03`   | Celestial Navigator  | `projects/beacon_V3.html`   | `projects/beacon_V3_2.html`   |
+| `MOD.03-V1`| Celestial Navigator V1 (history) | `projects/beacon_V1.html` | `projects/beacon_V1_2.html` |
+| `MOD.03-V2`| Celestial Navigator V2 (history) | `projects/beacon_V2.html` | `projects/beacon_V2_2.html` |
 
 The designator appears in three places on a project page: the board legend, the
 hero refdes line, and (on the landing page) the module card. New projects take

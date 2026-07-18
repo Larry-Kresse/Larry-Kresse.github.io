@@ -1,0 +1,455 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<title>Celestial Navigator V2 - Larry Kresse (Rev B)</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta name="description" content="Celestial Navigator V2 - an off-grid communicator with hinged 915MHz antenna by Larry Kresse" />
+	<meta name="keywords" content="Larry Kresse, Celestial Navigator, off-grid communicator, LoRa, ESP32, GPS, engineering portfolio" />
+	<link rel="stylesheet" href="../assets/css/fontawesome-all.min.css" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:600,800&display=swap" />
+	<style>
+		:root {
+			--mask: #0D674E;
+			--mask-raised: #12745A;
+			--mask-edge: #08402F;
+			--copper: #c88a3c;
+			--gold: #d9b25f;
+			--gold-bright: #ecd9a0;
+			--silk: #e8e6df;
+			--silk-dim: #cfd4c9;
+			--led-green: #4cd964;
+			--mono: "Courier New", Courier, monospace;
+			--heading: "Raleway", Helvetica, sans-serif;
+		}
+		* { box-sizing: border-box; margin: 0; padding: 0; }
+		html { scroll-behavior: smooth; }
+		body {
+			background-color: var(--mask-edge);
+			background-image: radial-gradient(rgba(200, 138, 60, 0.13) 1px, transparent 1px);
+			background-size: 24px 24px;
+			color: var(--silk);
+			font-family: Helvetica, Arial, sans-serif;
+			font-size: 16px;
+			line-height: 1.7;
+			padding: 2rem 1rem;
+		}
+
+		/* ===== Board outline ===== */
+		.board {
+			position: relative;
+			max-width: 1060px;
+			margin: 0 auto;
+			background: var(--mask);
+			border: 2px solid var(--copper);
+			border-radius: 14px;
+			padding: 4.5rem 3rem 0;
+			overflow: hidden;
+		}
+		.mount-hole {
+			position: absolute;
+			width: 22px;
+			height: 22px;
+			border-radius: 50%;
+			background: var(--mask-edge);
+			border: 4px solid var(--gold);
+			z-index: 5;
+		}
+		.mount-hole.tl { top: 14px; left: 14px; }
+		.mount-hole.tr { top: 14px; right: 14px; }
+		.mount-hole.bl { bottom: 14px; left: 14px; }
+		.mount-hole.br { bottom: 14px; right: 14px; }
+		.board-legend {
+			position: absolute;
+			top: 1.1rem;
+			left: 0;
+			width: 100%;
+			text-align: center;
+			font-family: var(--mono);
+			font-size: 0.68rem;
+			letter-spacing: 0.25em;
+			color: var(--copper);
+			text-transform: uppercase;
+		}
+
+		/* ===== Hero ===== */
+		.hero {
+			padding: 3rem 0;
+			text-align: center;
+			border-bottom: 1px dashed rgba(200, 138, 60, 0.35);
+		}
+		.status-led {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.5rem;
+			font-family: var(--mono);
+			font-size: 0.7rem;
+			letter-spacing: 0.2em;
+			color: var(--silk-dim);
+			margin-bottom: 1.5rem;
+		}
+		.status-led .led {
+			width: 9px;
+			height: 9px;
+			border-radius: 50%;
+			background: var(--led-green);
+			animation: blink 2.4s infinite;
+		}
+		@keyframes blink {
+			0%, 100% { opacity: 1; }
+			50% { opacity: 0.25; }
+		}
+		.hero h1 {
+			font-family: var(--heading);
+			font-weight: 800;
+			font-size: clamp(2rem, 5vw, 3.2rem);
+			letter-spacing: 0.08em;
+			text-transform: uppercase;
+			color: var(--gold-bright);
+			line-height: 1.15;
+		}
+		.hero .refdes {
+			display: block;
+			font-family: var(--mono);
+			font-size: 0.75rem;
+			letter-spacing: 0.3em;
+			color: var(--copper);
+			margin-bottom: 0.75rem;
+		}
+		.hero .tagline {
+			max-width: 34rem;
+			margin: 1.25rem auto 0;
+			font-family: var(--heading);
+			font-weight: 600;
+			font-size: 0.82rem;
+			letter-spacing: 0.14em;
+			text-transform: uppercase;
+			color: var(--silk);
+		}
+		.hero .tagline a { color: var(--gold); text-decoration: none; border-bottom: 1px dotted var(--copper); }
+		.hero .tagline a:hover { color: var(--gold-bright); border-bottom-style: solid; }
+		.hero-img {
+			display: block;
+			max-width: 640px;
+			width: 100%;
+			margin: 2.25rem auto 0;
+			border: 1px solid var(--copper);
+			border-radius: 5px;
+		}
+		.hero-nav {
+			margin-top: 2.25rem;
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+			gap: 0.75rem;
+		}
+		.pad-link {
+			font-family: var(--mono);
+			font-size: 0.78rem;
+			letter-spacing: 0.18em;
+			text-transform: uppercase;
+			text-decoration: none;
+			color: var(--gold);
+			border: 1px solid var(--copper);
+			border-radius: 3px;
+			padding: 0.55rem 1.3rem;
+			background: transparent;
+			transition: all 0.25s ease;
+		}
+		.pad-link:hover {
+			background: var(--gold);
+			border-color: var(--gold);
+			color: var(--mask);
+		}
+
+		/* ===== Sections ===== */
+		section { padding: 3.5rem 0; border-bottom: 1px dashed rgba(200, 138, 60, 0.35); }
+		section:last-of-type { border-bottom: none; }
+		.sec-head {
+			display: flex;
+			align-items: baseline;
+			gap: 1rem;
+			margin-bottom: 1.75rem;
+		}
+		.sec-head .num {
+			font-family: var(--mono);
+			font-size: 0.72rem;
+			letter-spacing: 0.2em;
+			color: var(--copper);
+			white-space: nowrap;
+		}
+		.sec-head h2 {
+			font-family: var(--heading);
+			font-weight: 800;
+			font-size: 1.5rem;
+			letter-spacing: 0.14em;
+			text-transform: uppercase;
+			color: var(--gold-bright);
+		}
+		.sec-head .rule {
+			flex: 1;
+			height: 1px;
+			background: repeating-linear-gradient(90deg, var(--copper) 0 8px, transparent 8px 14px);
+			align-self: center;
+		}
+		p.body-copy { max-width: 46rem; color: var(--silk); margin-bottom: 1rem; }
+		.body-copy a, .sub-section p a {
+			color: var(--gold);
+			text-decoration: none;
+			border-bottom: 1px dotted var(--copper);
+		}
+		.body-copy a:hover, .sub-section p a:hover { color: var(--gold-bright); border-bottom-style: solid; }
+		.body-copy strong, .sub-section p strong { color: var(--gold-bright); font-weight: 600; }
+
+		/* ===== Subsections (detail views) ===== */
+		.sub-section {
+			background: var(--mask-raised);
+			border: 1px solid rgba(200, 138, 60, 0.3);
+			border-radius: 5px;
+			padding: 1.75rem 1.6rem;
+			margin-top: 1.5rem;
+		}
+		.sub-section .det {
+			display: block;
+			font-family: var(--mono);
+			font-size: 0.66rem;
+			letter-spacing: 0.2em;
+			color: var(--copper);
+			text-transform: uppercase;
+			margin-bottom: 0.35rem;
+		}
+		.sub-section h3 {
+			font-family: var(--heading);
+			font-weight: 600;
+			font-size: 1.05rem;
+			letter-spacing: 0.1em;
+			text-transform: uppercase;
+			color: var(--gold-bright);
+			margin-bottom: 0.9rem;
+		}
+		.sub-section p {
+			max-width: 46rem;
+			font-size: 0.92rem;
+			color: var(--silk-dim);
+			margin-bottom: 0.9rem;
+		}
+		.sub-section p:last-of-type { margin-bottom: 0; }
+
+		/* ===== Galleries ===== */
+		.gallery-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+			gap: 1rem;
+			margin-top: 1.4rem;
+		}
+		.gallery-grid a {
+			position: relative;
+			display: block;
+			border: 1px solid rgba(200, 138, 60, 0.45);
+			border-radius: 4px;
+			overflow: hidden;
+			transition: all 0.25s ease;
+		}
+		.gallery-grid a:hover {
+			border-color: var(--gold);
+			transform: translateY(-4px);
+		}
+		.gallery-grid img {
+			display: block;
+			width: 100%;
+			height: 220px;
+			object-fit: cover;
+		}
+		.gallery-note {
+			font-family: var(--mono);
+			font-size: 0.64rem;
+			letter-spacing: 0.16em;
+			text-transform: uppercase;
+			color: var(--copper);
+			margin-top: 0.7rem;
+		}
+		.figure {
+			display: block;
+			max-width: 640px;
+			width: 100%;
+			margin: 1.5rem 0 0;
+			border: 1px solid var(--copper);
+			border-radius: 5px;
+		}
+
+		/* ===== Footer ===== */
+		.actions { margin-top: 2rem; display: flex; flex-wrap: wrap; gap: 0.75rem; }
+		.gold-fingers {
+			margin: 3rem -3rem 0;
+			height: 46px;
+			background: repeating-linear-gradient(90deg,
+				var(--mask-edge) 0 10px,
+				var(--copper) 10px 14px,
+				var(--gold) 14px 30px,
+				var(--copper) 30px 34px,
+				var(--mask-edge) 34px 44px);
+			border-top: 2px solid var(--copper);
+		}
+		.footer-note {
+			text-align: center;
+			font-family: var(--mono);
+			font-size: 0.66rem;
+			letter-spacing: 0.2em;
+			color: var(--silk-dim);
+			padding: 1.5rem 0 0.5rem;
+			text-transform: uppercase;
+		}
+		.footer-note a { color: var(--copper); text-decoration: none; }
+		.footer-note a:hover { text-decoration: underline; }
+
+		@media screen and (max-width: 720px) {
+			body { padding: 1rem 0.5rem; }
+			.board { padding: 4rem 1.25rem 0; }
+			.board-legend { font-size: 0.58rem; letter-spacing: 0.14em; padding: 0 2.5rem; }
+			.hero .tagline { font-size: 0.72rem; letter-spacing: 0.1em; }
+			.sub-section { padding: 1.4rem 1.1rem; }
+			.gold-fingers { margin: 3rem -1.25rem 0; }
+			.sec-head { flex-wrap: wrap; }
+		}
+	</style>
+</head>
+<body>
+
+	<div class="board">
+		<span class="mount-hole tl"></span>
+		<span class="mount-hole tr"></span>
+		<span class="mount-hole bl"></span>
+		<span class="mount-hole br"></span>
+		<div class="board-legend">LKR-2026 &middot; MOD.03-V2 &middot; Celestial Navigator V2 &middot; Rev B</div>
+
+		<!-- Hero -->
+		<header class="hero">
+			<div class="status-led"><span class="led"></span>ANT UP &mdash; RANGE IMPROVED</div>
+			<h1><span class="refdes">MOD.03 REV V2 &mdash; OFF-GRID COMMUNICATOR</span>Celestial Navigator V2</h1>
+			<p class="tagline">A unique off-grid communicator with hinged 915MHz antenna, designed to improve on <a href="beacon_V1_2.html">Version 1</a></p>
+			<img class="hero-img" src="images/beacon/CAD_beacon_V2_isometric_antenna.png" alt="CAD render of the Celestial Navigator V2 with hinged antenna" />
+			<nav class="hero-nav">
+				<a class="pad-link" href="#background">Background</a>
+				<a class="pad-link" href="#hardware">Hardware</a>
+				<a class="pad-link" href="#bring-up">Bring-up</a>
+				<a class="pad-link" href="#testing">Testing</a>
+				<a class="pad-link" href="beacon_V1_2.html">&larr; V1</a>
+				<a class="pad-link" href="beacon_V3_2.html">V3 &rarr;</a>
+				<a class="pad-link" href="../index2.html">&larr; Main Board</a>
+			</nav>
+		</header>
+
+		<!-- Background -->
+		<section id="background">
+			<div class="sec-head">
+				<span class="num">SHT 1/4</span>
+				<h2>Background</h2>
+				<span class="rule"></span>
+			</div>
+			<p class="body-copy">Last year, I built and user tested an off-grid communicator for outdoor situations without cell service. Overall, the tests of the device looked promising. However, the test also identified some areas for improvement.</p>
+			<p class="body-copy">It is time to design <strong>Version 2</strong> of the Celestial Navigator.</p>
+			<img class="figure" src="images/beacon/CAD_beacon_V2_overview.png" alt="CAD overview of the Celestial Navigator V2" />
+		</section>
+
+		<!-- Hardware design changes -->
+		<section id="hardware">
+			<div class="sec-head">
+				<span class="num">SHT 2/4</span>
+				<h2>Hardware Design Changes</h2>
+				<span class="rule"></span>
+			</div>
+			<p class="body-copy">The design of this off-grid communicator involved balancing factors across <strong>several disciplines of engineering</strong>. The 3D printed case needed to be robust and easily manufacturable. The electronic hardware required a custom PCB to connect the myriad of IO devices, in a small and portable form factor. The industrial design should be intuitive for new users, and shouldn't require much explaining or manual-reading.</p>
+
+			<article class="sub-section">
+				<span class="det">DET A &mdash; ELECTRONICS</span>
+				<h3>Electronics design</h3>
+				<p>The electrical hardware design has much in common with Version 1. The biggest changes include integrating compass, accelerometer, and GPS sensors in the PCB design rather than using external breakout boards. This allows for a thinner, more robust, and more manufacturable design. The soft power switch from Version 1 was also eliminated for simplicity, cost, and ease of use.</p>
+				<p>The first schematic contains the ESP32 and support circuitry. The second schematic shows the user input components: the switches and knob. Almost nothing about these sheets changed from Version 1.</p>
+				<p>The third schematic contains the indication LEDs. The main change was the addition of side-firing LEDs for the flashlight. Version 1 had a flashlight, but it wasn't very effective due to using up-firing LEDs with a makeshift reflector.</p>
+				<p>The fourth schematic sheet contains the sensors and RF components. External breakout boards have been eliminated and all sensors are now integrated on the Navigator's PCB.</p>
+				<p>The final schematic contains the power management circuitry. The TI TPS61088-based boost converter is still present. A TI BQ29700-based battery protection circuit is implemented to avoid overdischarging the lithium battery. Version 1 had a soft power button and software-controlled battery management, so it could shut itself down if the battery voltage dropped too low. Since Version 2 eliminates the soft power button for simplicity, a hardware solution for battery protection was needed.</p>
+				<div class="gallery-grid">
+					<a href="images/beacon/BeaconV2_ESP32.png"><img src="images/beacon/BeaconV2_ESP32.png" alt="V2 ESP32 schematic sheet" /></a>
+					<a href="images/beacon/BeaconV2_Digital_IO.png"><img src="images/beacon/BeaconV2_Digital_IO.png" alt="V2 digital IO schematic sheet" /></a>
+					<a href="images/beacon/BeaconV2_LEDs.png"><img src="images/beacon/BeaconV2_LEDs.png" alt="V2 LED schematic sheet" /></a>
+					<a href="images/beacon/BeaconV2_Modules.png"><img src="images/beacon/BeaconV2_Modules.png" alt="V2 modules and sensors schematic sheet" /></a>
+					<a href="images/beacon/BeaconV2_Power_Core.png"><img src="images/beacon/BeaconV2_Power_Core.png" alt="V2 power core schematic sheet" /></a>
+				</div>
+				<p class="gallery-note">Click any thumbnail to view the full image</p>
+			</article>
+
+			<article class="sub-section">
+				<span class="det">DET B &mdash; PCB LAYOUT</span>
+				<h3>Board design</h3>
+				<p>The PCB layout is similar to Version 1's layout. Major changes include the 18650 battery mount. V2 has a battery holder that enables hotswapping batteries, where V1's battery was soldered in place. V2 also incorporates a physical power switch, a battery protection circuit, and a soldered-down GPS module.</p>
+				<p>The only component that is still implemented as a breakout board is the OLED screen, which has doubled in size from V1, measuring 128x64 pixels (MID). There also is an option for a 128x128 pixel OLED (BIG).</p>
+				<p>Like Version 1, this is a 4-layer board. The top mostly has traces running left-to-right, and the bottom mostly top-to-bottom. This project has been very helpful for leveling up my PCB design skills, and the resulting PCB is much cleaner than Version 1's board.</p>
+				<div class="gallery-grid">
+					<a href="images/beacon/V2_PCB_bothsides.png"><img src="images/beacon/V2_PCB_bothsides.png" alt="Both sides of the V2 PCB" /></a>
+					<a href="images/beacon/V1_PCB_bothsides.png"><img src="images/beacon/V1_PCB_bothsides.png" alt="Both sides of the V1 PCB for comparison" /></a>
+				</div>
+			</article>
+
+			<article class="sub-section">
+				<span class="det">DET C &mdash; MECHANICAL</span>
+				<h3>Mechanical design</h3>
+				<p>V2's physical design shares some commonality with V1. The gray case that fits around the PCBA uses a similar design, and the "shield" pieces printed in an accent color are used again for this project.</p>
+				<p>Where the design starts diverging is the antenna mount. Where V1 used an unconstrained rubber duck antenna, V2 constrains the antenna in a hinged mounting clip. This is designed to keep the antenna upright using gravity. If the antenna stays upright with respect to the ground, it will perform much better than V1's antenna.</p>
+				<p>Version 2 also contains a clip over the programming port, allowing access without dismantling the device, and a battery door to enable 18650 battery hot-swapping.</p>
+				<div class="gallery-grid">
+					<a href="images/beacon/CAD_beacon_V2_overview.png"><img src="images/beacon/CAD_beacon_V2_overview.png" alt="CAD overview of the V2 enclosure" /></a>
+					<a href="images/beacon/CAD_beacon_V2_exploded.png"><img src="images/beacon/CAD_beacon_V2_exploded.png" alt="Exploded CAD view of the V2 enclosure" /></a>
+				</div>
+			</article>
+		</section>
+
+		<!-- Bring-up -->
+		<section id="bring-up">
+			<div class="sec-head">
+				<span class="num">SHT 3/4</span>
+				<h2>Board Bring-up</h2>
+				<span class="rule"></span>
+			</div>
+			<p class="body-copy">Board bring-up was extremely fast on this iteration, as it shared much of its design with the already <strong>battle-tested Version 1</strong>.</p>
+		</section>
+
+		<!-- Prototype run and user testing -->
+		<section id="testing">
+			<div class="sec-head">
+				<span class="num">SHT 4/4</span>
+				<h2>Prototype Run and User Testing</h2>
+				<span class="rule"></span>
+			</div>
+			<p class="body-copy">Once again, the project must be <strong>tested with actual users</strong>. 30 Celestial Navigator V2 prototypes, consisting of functional PCBAs and 3D printed enclosures, were manufactured.</p>
+			<p class="body-copy">The V1 Celestial Navigators from last test were also deployed. Prototyping is expensive, it would be a shame to not reuse the old devices.</p>
+			<p class="body-copy">All 3D printing, through-hole soldering, and final assembly was done in-house.</p>
+
+			<article class="sub-section">
+				<span class="det">DET D &mdash; FIELD TEST</span>
+				<h3>User testing</h3>
+				<p>The Celestial Navigator V2 continues the pattern of cyberpunk-inspired industrial design. The first picture shows one of the 30 prototypes used in user testing, sending an SOS message. Luckily, nobody in testing needed this feature!</p>
+				<p>The 30 prototypes were deployed at a camping event. Users were again given a brief crash course on the UI and then released into the wild wielding their communicator. The simplicity of the interface meant that people who used the device last year didn't need a refresher.</p>
+				<p>The carabiner clip was pushed as the dominant attachment method, as it enables the antenna to be properly positioned. At the event, I noticed that the antenna clip had the desired effect. Antennas of Navigators remained pointed at the sky, the optimal pointing for a monopole rubber duck. Subjective range appeared vastly greater than the V1 test.</p>
+				<p>The number one problem identified was once again the antenna. Though the carabiner clip worked, the rotating antenna added significant mechanical complexity and failure points. Some of the SMA cables came undone due to vibration. The design was also more difficult to assemble than I'd like.</p>
+				<p>Version 2 of the Navigator worked even better than Version 1, but I am apparently never satisfied with my projects, so it is time for <strong><a href="beacon_V3_2.html">Version 3 of the Celestial Navigator</a></strong>!</p>
+				<div class="gallery-grid">
+					<a href="images/beacon/beacon_V2_SOS.png"><img src="images/beacon/beacon_V2_SOS.png" alt="V2 prototype sending an SOS message" /></a>
+					<a href="images/beacon/Beacon_V2_dooropen.png"><img src="images/beacon/Beacon_V2_dooropen.png" alt="V2 with battery door open" /></a>
+					<a href="images/beacon/radiation_pattern_monopole.png"><img src="images/beacon/radiation_pattern_monopole.png" alt="Radiation pattern of a monopole antenna" /></a>
+					<a href="images/beacon/beaconV2_worn_on_backpack.png"><img src="images/beacon/beaconV2_worn_on_backpack.png" alt="V2 worn on a backpack strap" /></a>
+				</div>
+			</article>
+
+			<div class="actions">
+				<a class="pad-link" href="../index2.html">&larr; Main Board</a>
+				<a class="pad-link" href="beacon_V1_2.html">&larr; V1</a>
+				<a class="pad-link" href="beacon_V3_2.html">V3 &rarr;</a>
+				<a class="pad-link" href="beacon_V2.html">View Rev A</a>
+			</div>
+			<p class="footer-note">&copy; 2026 Larry Kresse &middot; All rights reserved &middot; <a href="../index2.html">LKR-2026 Rev B</a></p>
+			<div class="gold-fingers"></div>
+		</section>
+	</div>
+
+</body>
+</html>

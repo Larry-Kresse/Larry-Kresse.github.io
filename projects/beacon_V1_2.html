@@ -1,0 +1,473 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<title>Celestial Navigator V1 - Larry Kresse (Rev B)</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta name="description" content="Celestial Navigator V1 - an ESP32-based, GPS-enabled 915MHz off-grid communicator by Larry Kresse" />
+	<meta name="keywords" content="Larry Kresse, Celestial Navigator, off-grid communicator, LoRa, ESP32, GPS, engineering portfolio" />
+	<link rel="stylesheet" href="../assets/css/fontawesome-all.min.css" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:600,800&display=swap" />
+	<style>
+		:root {
+			--mask: #0D674E;
+			--mask-raised: #12745A;
+			--mask-edge: #08402F;
+			--copper: #c88a3c;
+			--gold: #d9b25f;
+			--gold-bright: #ecd9a0;
+			--silk: #e8e6df;
+			--silk-dim: #cfd4c9;
+			--led-green: #4cd964;
+			--mono: "Courier New", Courier, monospace;
+			--heading: "Raleway", Helvetica, sans-serif;
+		}
+		* { box-sizing: border-box; margin: 0; padding: 0; }
+		html { scroll-behavior: smooth; }
+		body {
+			background-color: var(--mask-edge);
+			background-image: radial-gradient(rgba(200, 138, 60, 0.13) 1px, transparent 1px);
+			background-size: 24px 24px;
+			color: var(--silk);
+			font-family: Helvetica, Arial, sans-serif;
+			font-size: 16px;
+			line-height: 1.7;
+			padding: 2rem 1rem;
+		}
+
+		/* ===== Board outline ===== */
+		.board {
+			position: relative;
+			max-width: 1060px;
+			margin: 0 auto;
+			background: var(--mask);
+			border: 2px solid var(--copper);
+			border-radius: 14px;
+			padding: 4.5rem 3rem 0;
+			overflow: hidden;
+		}
+		.mount-hole {
+			position: absolute;
+			width: 22px;
+			height: 22px;
+			border-radius: 50%;
+			background: var(--mask-edge);
+			border: 4px solid var(--gold);
+			z-index: 5;
+		}
+		.mount-hole.tl { top: 14px; left: 14px; }
+		.mount-hole.tr { top: 14px; right: 14px; }
+		.mount-hole.bl { bottom: 14px; left: 14px; }
+		.mount-hole.br { bottom: 14px; right: 14px; }
+		.board-legend {
+			position: absolute;
+			top: 1.1rem;
+			left: 0;
+			width: 100%;
+			text-align: center;
+			font-family: var(--mono);
+			font-size: 0.68rem;
+			letter-spacing: 0.25em;
+			color: var(--copper);
+			text-transform: uppercase;
+		}
+
+		/* ===== Hero ===== */
+		.hero {
+			padding: 3rem 0;
+			text-align: center;
+			border-bottom: 1px dashed rgba(200, 138, 60, 0.35);
+		}
+		.status-led {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.5rem;
+			font-family: var(--mono);
+			font-size: 0.7rem;
+			letter-spacing: 0.2em;
+			color: var(--silk-dim);
+			margin-bottom: 1.5rem;
+		}
+		.status-led .led {
+			width: 9px;
+			height: 9px;
+			border-radius: 50%;
+			background: var(--led-green);
+			animation: blink 2.4s infinite;
+		}
+		@keyframes blink {
+			0%, 100% { opacity: 1; }
+			50% { opacity: 0.25; }
+		}
+		.hero h1 {
+			font-family: var(--heading);
+			font-weight: 800;
+			font-size: clamp(2rem, 5vw, 3.2rem);
+			letter-spacing: 0.08em;
+			text-transform: uppercase;
+			color: var(--gold-bright);
+			line-height: 1.15;
+		}
+		.hero .refdes {
+			display: block;
+			font-family: var(--mono);
+			font-size: 0.75rem;
+			letter-spacing: 0.3em;
+			color: var(--copper);
+			margin-bottom: 0.75rem;
+		}
+		.hero .tagline {
+			max-width: 34rem;
+			margin: 1.25rem auto 0;
+			font-family: var(--heading);
+			font-weight: 600;
+			font-size: 0.82rem;
+			letter-spacing: 0.14em;
+			text-transform: uppercase;
+			color: var(--silk);
+		}
+		.hero-img {
+			display: block;
+			max-width: 640px;
+			width: 100%;
+			margin: 2.25rem auto 0;
+			border: 1px solid var(--copper);
+			border-radius: 5px;
+		}
+		.hero-nav {
+			margin-top: 2.25rem;
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+			gap: 0.75rem;
+		}
+		.pad-link {
+			font-family: var(--mono);
+			font-size: 0.78rem;
+			letter-spacing: 0.18em;
+			text-transform: uppercase;
+			text-decoration: none;
+			color: var(--gold);
+			border: 1px solid var(--copper);
+			border-radius: 3px;
+			padding: 0.55rem 1.3rem;
+			background: transparent;
+			transition: all 0.25s ease;
+		}
+		.pad-link:hover {
+			background: var(--gold);
+			border-color: var(--gold);
+			color: var(--mask);
+		}
+
+		/* ===== Sections ===== */
+		section { padding: 3.5rem 0; border-bottom: 1px dashed rgba(200, 138, 60, 0.35); }
+		section:last-of-type { border-bottom: none; }
+		.sec-head {
+			display: flex;
+			align-items: baseline;
+			gap: 1rem;
+			margin-bottom: 1.75rem;
+		}
+		.sec-head .num {
+			font-family: var(--mono);
+			font-size: 0.72rem;
+			letter-spacing: 0.2em;
+			color: var(--copper);
+			white-space: nowrap;
+		}
+		.sec-head h2 {
+			font-family: var(--heading);
+			font-weight: 800;
+			font-size: 1.5rem;
+			letter-spacing: 0.14em;
+			text-transform: uppercase;
+			color: var(--gold-bright);
+		}
+		.sec-head .rule {
+			flex: 1;
+			height: 1px;
+			background: repeating-linear-gradient(90deg, var(--copper) 0 8px, transparent 8px 14px);
+			align-self: center;
+		}
+		p.body-copy { max-width: 46rem; color: var(--silk); margin-bottom: 1rem; }
+		.body-copy a, .sub-section p a {
+			color: var(--gold);
+			text-decoration: none;
+			border-bottom: 1px dotted var(--copper);
+		}
+		.body-copy a:hover, .sub-section p a:hover { color: var(--gold-bright); border-bottom-style: solid; }
+		.body-copy strong, .sub-section p strong { color: var(--gold-bright); font-weight: 600; }
+
+		/* ===== Subsections (detail views) ===== */
+		.sub-section {
+			background: var(--mask-raised);
+			border: 1px solid rgba(200, 138, 60, 0.3);
+			border-radius: 5px;
+			padding: 1.75rem 1.6rem;
+			margin-top: 1.5rem;
+		}
+		.sub-section .det {
+			display: block;
+			font-family: var(--mono);
+			font-size: 0.66rem;
+			letter-spacing: 0.2em;
+			color: var(--copper);
+			text-transform: uppercase;
+			margin-bottom: 0.35rem;
+		}
+		.sub-section h3 {
+			font-family: var(--heading);
+			font-weight: 600;
+			font-size: 1.05rem;
+			letter-spacing: 0.1em;
+			text-transform: uppercase;
+			color: var(--gold-bright);
+			margin-bottom: 0.9rem;
+		}
+		.sub-section p {
+			max-width: 46rem;
+			font-size: 0.92rem;
+			color: var(--silk-dim);
+			margin-bottom: 0.9rem;
+		}
+		.sub-section p:last-of-type { margin-bottom: 0; }
+
+		/* ===== Galleries ===== */
+		.gallery-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+			gap: 1rem;
+			margin-top: 1.4rem;
+		}
+		.gallery-grid a {
+			position: relative;
+			display: block;
+			border: 1px solid rgba(200, 138, 60, 0.45);
+			border-radius: 4px;
+			overflow: hidden;
+			transition: all 0.25s ease;
+		}
+		.gallery-grid a:hover {
+			border-color: var(--gold);
+			transform: translateY(-4px);
+		}
+		.gallery-grid img {
+			display: block;
+			width: 100%;
+			height: 220px;
+			object-fit: cover;
+		}
+		.gallery-note {
+			font-family: var(--mono);
+			font-size: 0.64rem;
+			letter-spacing: 0.16em;
+			text-transform: uppercase;
+			color: var(--copper);
+			margin-top: 0.7rem;
+		}
+		.figure {
+			display: block;
+			max-width: 640px;
+			width: 100%;
+			margin: 1.5rem 0 0;
+			border: 1px solid var(--copper);
+			border-radius: 5px;
+		}
+		.video-figure {
+			display: block;
+			max-width: 640px;
+			width: 100%;
+			margin: 1.4rem 0 0;
+			border: 1px solid var(--copper);
+			border-radius: 5px;
+		}
+
+		/* ===== Footer ===== */
+		.actions { margin-top: 2rem; display: flex; flex-wrap: wrap; gap: 0.75rem; }
+		.gold-fingers {
+			margin: 3rem -3rem 0;
+			height: 46px;
+			background: repeating-linear-gradient(90deg,
+				var(--mask-edge) 0 10px,
+				var(--copper) 10px 14px,
+				var(--gold) 14px 30px,
+				var(--copper) 30px 34px,
+				var(--mask-edge) 34px 44px);
+			border-top: 2px solid var(--copper);
+		}
+		.footer-note {
+			text-align: center;
+			font-family: var(--mono);
+			font-size: 0.66rem;
+			letter-spacing: 0.2em;
+			color: var(--silk-dim);
+			padding: 1.5rem 0 0.5rem;
+			text-transform: uppercase;
+		}
+		.footer-note a { color: var(--copper); text-decoration: none; }
+		.footer-note a:hover { text-decoration: underline; }
+
+		@media screen and (max-width: 720px) {
+			body { padding: 1rem 0.5rem; }
+			.board { padding: 4rem 1.25rem 0; }
+			.board-legend { font-size: 0.58rem; letter-spacing: 0.14em; padding: 0 2.5rem; }
+			.hero .tagline { font-size: 0.72rem; letter-spacing: 0.1em; }
+			.sub-section { padding: 1.4rem 1.1rem; }
+			.gold-fingers { margin: 3rem -1.25rem 0; }
+			.sec-head { flex-wrap: wrap; }
+		}
+	</style>
+</head>
+<body>
+
+	<div class="board">
+		<span class="mount-hole tl"></span>
+		<span class="mount-hole tr"></span>
+		<span class="mount-hole bl"></span>
+		<span class="mount-hole br"></span>
+		<div class="board-legend">LKR-2026 &middot; MOD.03-V1 &middot; Celestial Navigator V1 &middot; Rev B</div>
+
+		<!-- Hero -->
+		<header class="hero">
+			<div class="status-led"><span class="led"></span>GPS LOCK &mdash; 30 UNITS DEPLOYED</div>
+			<h1><span class="refdes">MOD.03 REV V1 &mdash; OFF-GRID COMMUNICATOR</span>Celestial Navigator V1</h1>
+			<p class="tagline">An ESP32-based, GPS-enabled 915MHz communicator for off-grid applications</p>
+			<img class="hero-img" src="images/beacon/CAD_beacon_isometric-antenna.png" alt="CAD render of the Celestial Navigator V1 with antenna" />
+			<nav class="hero-nav">
+				<a class="pad-link" href="#background">Background</a>
+				<a class="pad-link" href="#hardware">Hardware</a>
+				<a class="pad-link" href="#bring-up">Bring-up</a>
+				<a class="pad-link" href="#testing">Testing</a>
+				<a class="pad-link" href="beacon_V2_2.html">V2 &rarr;</a>
+				<a class="pad-link" href="../index2.html">&larr; Main Board</a>
+			</nav>
+		</header>
+
+		<!-- Background -->
+		<section id="background">
+			<div class="sec-head">
+				<span class="num">SHT 1/4</span>
+				<h2>Background</h2>
+				<span class="rule"></span>
+			</div>
+			<p class="body-copy">Camping, hiking, and other outdoor events often take place in areas with weak cell signal. Explorers could benefit from a <strong>communication device</strong> that uses an independent channel to operate without external infrastructure. The device should enable <strong>peer-to-peer communication</strong>, wayfinding, and emergency messaging. In addition, users who receive a message should be able to navigate to the sender, allowing people to find each other in the wilderness.</p>
+			<img class="figure" src="images/beacon/V1_designoverview.png" alt="Design overview of the Celestial Navigator V1" />
+		</section>
+
+		<!-- Hardware design -->
+		<section id="hardware">
+			<div class="sec-head">
+				<span class="num">SHT 2/4</span>
+				<h2>Hardware Design</h2>
+				<span class="rule"></span>
+			</div>
+			<p class="body-copy">The design of this off-grid communicator involved balancing factors across <strong>several disciplines of engineering</strong>. The 3D printed case needed to be robust and easily manufacturable. The electronic hardware required a custom PCB to connect the myriad of IO devices, in a small and portable form factor. The industrial design should be intuitive for new users, and shouldn't require much explaining or manual-reading.</p>
+
+			<article class="sub-section">
+				<span class="det">DET A &mdash; ELECTRONICS</span>
+				<h3>Electronics design</h3>
+				<p>The electrical hardware design comprises a mainboard that connects breakout boards, switches, and indicators to an Espressif ESP-32 microcontroller. The board also includes a battery charger and a DC-DC converter.</p>
+				<p>The first schematic contains the ESP32 and support circuitry. I used a Tag-Connect TC-2030 for the serial port. The USB-C port is only used for charging. As the original ESP32 lacks native USB support, omitting USB serial saves a USB-UART bridge chip, reducing production costs. Finally, a magnetic buzzer provides an indication that a message has been received.</p>
+				<p>The second schematic shows the user input components, consisting of 5x Cherry MX mechanical keyswitches, one quadrature encoder, and supporting components. The ENTER button requires a pull-up resistor because the ESP32's IO34 pin lacks a built-in pull-up.</p>
+				<p>The third schematic contains the indication LEDs. 30 WS2812B-compatible LEDs provide feedback to the user. Most of these are arranged in a ring around the screen, forming a digital compass. This allows the compass to point in any direction, allowing the user to navigate to the source of a message.</p>
+				<p>The fourth schematic describes the module and sensor connections of the device. These include a magnetometer (compass), a GPS receiver, a 128x32 pixel OLED screen, and a SX-1276-based LoRa modem.</p>
+				<p>The final schematic contains the power management circuitry. A TI TPS61088-based boost converter steps the 3.7V lithium battery voltage to the 5V required by the WS2812B LEDs. A pair of P-FETs act as an ideal diode to allow the system to swap between 5V USB power and the onboard battery.</p>
+				<div class="gallery-grid">
+					<a href="images/beacon/Beacon_ESP32.png"><img src="images/beacon/Beacon_ESP32.png" alt="ESP32 schematic sheet" /></a>
+					<a href="images/beacon/Beacon_Digital_IO.png"><img src="images/beacon/Beacon_Digital_IO.png" alt="Digital IO schematic sheet" /></a>
+					<a href="images/beacon/Beacon_LEDs.png"><img src="images/beacon/Beacon_LEDs.png" alt="LED schematic sheet" /></a>
+					<a href="images/beacon/Beacon_Modules.png"><img src="images/beacon/Beacon_Modules.png" alt="Modules and sensors schematic sheet" /></a>
+					<a href="images/beacon/Beacon_Power_Core.png"><img src="images/beacon/Beacon_Power_Core.png" alt="Power core schematic sheet" /></a>
+				</div>
+				<p class="gallery-note">Click any thumbnail to view the full image</p>
+			</article>
+
+			<article class="sub-section">
+				<span class="det">DET B &mdash; PCB LAYOUT</span>
+				<h3>Board design</h3>
+				<p>The PCB's shape was chosen to be approximately rectangular with a cutout in the top right where the lithium battery would be installed. To save on development time for this first prototype, several breakout boards were used for sensors in this project. It is a 4-layer board, to provide a ground plane under RF traces.</p>
+				<p>The top of the PCB hosts the ESP32 microcontroller, a level shifter IC, OLED screen breakout, battery charging circuit, DC-DC converter, and all SMT components. The SMT components in this board were populated by JLCPCB's assembly service.</p>
+				<p>On the bottom of the PCBA, breakout boards for the compass IC, GPS receiver, and LoRa modem can be found. Having breakout boards connected via 2.54mm headers on both sides of the PCBA made the entire assembly approximately 15mm thick.</p>
+				<div class="gallery-grid">
+					<a href="images/beacon/V1_PCB_bothsides.png"><img src="images/beacon/V1_PCB_bothsides.png" alt="Both sides of the V1 PCB" /></a>
+				</div>
+			</article>
+
+			<article class="sub-section">
+				<span class="det">DET C &mdash; MECHANICAL</span>
+				<h3>Mechanical design</h3>
+				<p>A clamshell of 3D printed plastic (shown as gray) encased the PCB (the purple form) and provided some internal protection to the PCB and 18650-sized lithium battery (green cylinder).</p>
+				<p>A "shield" printed in an accent color (red in this case) covered the lithium battery, the GPS antenna, and the power switch. This also helped hold the clamshell together. To save assembly costs, a single screw connects the two halves of the "shield" together.</p>
+				<p>The final design is rather rigid and robust. A translucent ring surrounds the screen bezel, and allows LEDs mounted on the PCB in a compass ring to be viewed through the plastic enclosure.</p>
+				<div class="gallery-grid">
+					<a href="images/beacon/CAD_beacon_overview.png"><img src="images/beacon/CAD_beacon_overview.png" alt="CAD overview of the V1 enclosure" /></a>
+					<a href="images/beacon/CAD_beacon_exploded.png"><img src="images/beacon/CAD_beacon_exploded.png" alt="Exploded CAD view of the V1 enclosure" /></a>
+				</div>
+			</article>
+		</section>
+
+		<!-- Bring-up -->
+		<section id="bring-up">
+			<div class="sec-head">
+				<span class="num">SHT 3/4</span>
+				<h2>Board Bring-up</h2>
+				<span class="rule"></span>
+			</div>
+			<p class="body-copy"><strong>With the hardware designed</strong>, the next step is board bring-up. This is an important part of hardware development and involves testing the prototype hardware to ensure it functions as intended.</p>
+
+			<article class="sub-section">
+				<span class="det">DET D &mdash; BRING-UP</span>
+				<h3>Bring-up</h3>
+				<p>Bringing up a board involves a variety of firmware, software, and electrical engineering experience. Embedded code must be written to interface with sensors and actuators on the board. Power systems must be stress tested to ensure they can perform in adverse conditions. Often, test equipment like oscilloscopes and spectrum analyzers are needed to debug electrical issues with the prototype.</p>
+				<p>This project required a few board runs to get working correctly. Due to the amount of IO devices on the board, the ESP32's strapping pins were needed. This resulted in some challenges as I determined how to ensure they were in the right state at boot, but still be usable for functionality when the device was in use.</p>
+				<p>The first image shows the indicator LEDs being tested with a full-green test pattern. An Adafruit library and test pattern was used to test the OLED display. The second image shows a fully-assembled PCBA. This was the hardware that made it out of the board bring-up stage to prototype production.</p>
+				<div class="gallery-grid">
+					<a href="images/beacon/early_bring_up.jpg"><img src="images/beacon/early_bring_up.jpg" alt="Early bring-up with LED test pattern" /></a>
+					<a href="images/beacon/beacon_PCBA.jpg"><img src="images/beacon/beacon_PCBA.jpg" alt="Fully assembled V1 PCBA" /></a>
+				</div>
+			</article>
+		</section>
+
+		<!-- Prototype run and user testing -->
+		<section id="testing">
+			<div class="sec-head">
+				<span class="num">SHT 4/4</span>
+				<h2>Prototype Run and User Testing</h2>
+				<span class="rule"></span>
+			</div>
+			<p class="body-copy">The hardware is working, but now the product itself must be <strong>tested with actual users</strong>. 30 Celestial Navigator prototypes, consisting of functional PCBAs and 3D printed enclosures, were manufactured.</p>
+			<p class="body-copy">All 3D printing, through-hole soldering, and final assembly was done in-house.</p>
+
+			<article class="sub-section">
+				<span class="det">DET E &mdash; FIELD TEST</span>
+				<h3>User testing</h3>
+				<p>The Celestial Navigator has cyberpunk styling and a robust 3D-printed case. The first image in this section is an actual picture of one of the 30 prototypes used in user testing.</p>
+				<p>The 30 prototypes were deployed at a camping event. Users were given a brief crash course on the UI and then released into the wild wielding their communicator.</p>
+				<p>The event lasted 4 days, and consisted of camping, hiking, and climbing. Weather included rain and shine, and temperatures ranging from 40&deg;F to 80&deg;F. Most people walked between 2 and 10 miles per day, and had the Celestial Navigator on for 8 hours each day.</p>
+				<p>Multiple mounting options were provided, from wrist mount to carabiner clip. Most users opted for the carabiner clip, hanging the device from a backpack strap. In use, the user could rotate the device up to view the screen.</p>
+				<p>Users praised the UI and tactile experience of using the Navigator, as well as the LED indication and functionality.</p>
+				<p>The number one problem identified was the antenna. The rubber duck antenna we used was adjustable, and was free to rotate as the user walked. A monopole antenna radiates in a toroidal pattern, with the peak radiation perpendicular to the axis of the antenna. This means that if our antenna is jostled into an orientation that is not perpendicular to the ground, it won't be as effective.</p>
+				<p>Overall, the Celestial Navigator performed very well on the first test run. No devices failed during operation, and users were pleased with the functionality. Still, I believed we could do better, and immediately started working on <strong><a href="beacon_V2_2.html">Version 2 of the Celestial Navigator</a></strong>.</p>
+				<div class="gallery-grid">
+					<a href="images/beacon/beacon_assembled.jpg"><img src="images/beacon/beacon_assembled.jpg" alt="Assembled Celestial Navigator V1 prototype" /></a>
+					<a href="images/beacon/beacon_worn_on_backpack.png"><img src="images/beacon/beacon_worn_on_backpack.png" alt="Navigator worn on a backpack strap" /></a>
+					<a href="images/beacon/radiation_pattern_monopole.png"><img src="images/beacon/radiation_pattern_monopole.png" alt="Radiation pattern of a monopole antenna" /></a>
+				</div>
+				<video class="video-figure" controls>
+					<source src="images/beacon/beacon_v1_whitebg.mp4" type="video/mp4">
+				</video>
+			</article>
+
+			<div class="actions">
+				<a class="pad-link" href="../index2.html">&larr; Main Board</a>
+				<a class="pad-link" href="beacon_V2_2.html">V2 &rarr;</a>
+				<a class="pad-link" href="beacon_V1.html">View Rev A</a>
+			</div>
+			<p class="footer-note">&copy; 2026 Larry Kresse &middot; All rights reserved &middot; <a href="../index2.html">LKR-2026 Rev B</a></p>
+			<div class="gold-fingers"></div>
+		</section>
+	</div>
+
+</body>
+</html>
