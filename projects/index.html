@@ -1,0 +1,373 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<title>Projects - Larry Kresse (Rev B)</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta name="description" content="Project index for Larry Kresse's engineering portfolio - hardware, firmware, mechanical, and industrial design projects" />
+	<meta name="keywords" content="Larry Kresse, engineering portfolio, projects, PCB, embedded systems, industrial design" />
+	<link rel="stylesheet" href="../assets/css/fontawesome-all.min.css" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:600,800&display=swap" />
+	<style>
+		:root {
+			--mask: #0D674E;
+			--mask-raised: #12745A;
+			--mask-edge: #08402F;
+			--copper: #c88a3c;
+			--gold: #d9b25f;
+			--gold-bright: #ecd9a0;
+			--silk: #e8e6df;
+			--silk-dim: #cfd4c9;
+			--led-green: #4cd964;
+			--mono: "Courier New", Courier, monospace;
+			--heading: "Raleway", Helvetica, sans-serif;
+		}
+		* { box-sizing: border-box; margin: 0; padding: 0; }
+		html { scroll-behavior: smooth; }
+		body {
+			background-color: var(--mask-edge);
+			background-image: radial-gradient(rgba(200, 138, 60, 0.13) 1px, transparent 1px);
+			background-size: 24px 24px;
+			color: var(--silk);
+			font-family: Helvetica, Arial, sans-serif;
+			font-size: 16px;
+			line-height: 1.7;
+			padding: 2rem 1rem;
+		}
+
+		/* ===== Board outline ===== */
+		.board {
+			position: relative;
+			max-width: 1060px;
+			margin: 0 auto;
+			background: var(--mask);
+			border: 2px solid var(--copper);
+			border-radius: 14px;
+			padding: 4.5rem 3rem 0;
+			overflow: hidden;
+		}
+		.mount-hole {
+			position: absolute;
+			width: 22px;
+			height: 22px;
+			border-radius: 50%;
+			background: var(--mask-edge);
+			border: 4px solid var(--gold);
+			z-index: 5;
+		}
+		.mount-hole.tl { top: 14px; left: 14px; }
+		.mount-hole.tr { top: 14px; right: 14px; }
+		.mount-hole.bl { bottom: 14px; left: 14px; }
+		.mount-hole.br { bottom: 14px; right: 14px; }
+		.board-legend {
+			position: absolute;
+			top: 1.1rem;
+			left: 0;
+			width: 100%;
+			text-align: center;
+			font-family: var(--mono);
+			font-size: 0.68rem;
+			letter-spacing: 0.25em;
+			color: var(--copper);
+			text-transform: uppercase;
+		}
+
+		/* ===== Hero ===== */
+		.hero {
+			padding: 3rem 0;
+			text-align: center;
+			border-bottom: 1px dashed rgba(200, 138, 60, 0.35);
+		}
+		.status-led {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.5rem;
+			font-family: var(--mono);
+			font-size: 0.7rem;
+			letter-spacing: 0.2em;
+			color: var(--silk-dim);
+			margin-bottom: 1.5rem;
+		}
+		.status-led .led {
+			width: 9px;
+			height: 9px;
+			border-radius: 50%;
+			background: var(--led-green);
+			animation: blink 2.4s infinite;
+		}
+		@keyframes blink {
+			0%, 100% { opacity: 1; }
+			50% { opacity: 0.25; }
+		}
+		.hero h1 {
+			font-family: var(--heading);
+			font-weight: 800;
+			font-size: clamp(2rem, 5vw, 3.2rem);
+			letter-spacing: 0.08em;
+			text-transform: uppercase;
+			color: var(--gold-bright);
+			line-height: 1.15;
+		}
+		.hero .refdes {
+			display: block;
+			font-family: var(--mono);
+			font-size: 0.75rem;
+			letter-spacing: 0.3em;
+			color: var(--copper);
+			margin-bottom: 0.75rem;
+		}
+		.hero .tagline {
+			max-width: 34rem;
+			margin: 1.25rem auto 0;
+			font-family: var(--heading);
+			font-weight: 600;
+			font-size: 0.82rem;
+			letter-spacing: 0.14em;
+			text-transform: uppercase;
+			color: var(--silk);
+		}
+		.hero-nav {
+			margin-top: 2.25rem;
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+			gap: 0.75rem;
+		}
+		.pad-link {
+			font-family: var(--mono);
+			font-size: 0.78rem;
+			letter-spacing: 0.18em;
+			text-transform: uppercase;
+			text-decoration: none;
+			color: var(--gold);
+			border: 1px solid var(--copper);
+			border-radius: 3px;
+			padding: 0.55rem 1.3rem;
+			background: transparent;
+			transition: all 0.25s ease;
+		}
+		.pad-link:hover {
+			background: var(--gold);
+			border-color: var(--gold);
+			color: var(--mask);
+		}
+
+		/* ===== Sections ===== */
+		section { padding: 3.5rem 0; border-bottom: 1px dashed rgba(200, 138, 60, 0.35); }
+		section:last-of-type { border-bottom: none; }
+		.sec-head {
+			display: flex;
+			align-items: baseline;
+			gap: 1rem;
+			margin-bottom: 1.75rem;
+		}
+		.sec-head .num {
+			font-family: var(--mono);
+			font-size: 0.72rem;
+			letter-spacing: 0.2em;
+			color: var(--copper);
+			white-space: nowrap;
+		}
+		.sec-head h2 {
+			font-family: var(--heading);
+			font-weight: 800;
+			font-size: 1.5rem;
+			letter-spacing: 0.14em;
+			text-transform: uppercase;
+			color: var(--gold-bright);
+		}
+		.sec-head .rule {
+			flex: 1;
+			height: 1px;
+			background: repeating-linear-gradient(90deg, var(--copper) 0 8px, transparent 8px 14px);
+			align-self: center;
+		}
+		p.body-copy { max-width: 46rem; color: var(--silk); margin-bottom: 1rem; }
+		.body-copy strong { color: var(--gold-bright); font-weight: 600; }
+
+		/* ===== Module cards ===== */
+		.module-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+			gap: 1.5rem;
+			margin-top: 2rem;
+		}
+		.module {
+			position: relative;
+			background: var(--mask-raised);
+			border: 1px dashed rgba(200, 138, 60, 0.55);
+			border-radius: 5px;
+			padding: 1.5rem 1.4rem 1.4rem;
+			transition: all 0.25s ease;
+		}
+		.module:hover {
+			border-style: solid;
+			border-color: var(--gold);
+			transform: translateY(-5px);
+		}
+		.module .fiducial {
+			position: absolute;
+			top: 10px;
+			right: 12px;
+			width: 14px;
+			height: 14px;
+			border: 1px solid var(--copper);
+			border-radius: 50%;
+		}
+		.module .fiducial:before, .module .fiducial:after {
+			content: '';
+			position: absolute;
+			background: var(--copper);
+		}
+		.module .fiducial:before { left: 50%; top: -4px; bottom: -4px; width: 1px; transform: translateX(-50%); }
+		.module .fiducial:after { top: 50%; left: -4px; right: -4px; height: 1px; transform: translateY(-50%); }
+		.module img {
+			width: 100%;
+			height: 170px;
+			object-fit: cover;
+			border-radius: 3px;
+			border: 1px solid rgba(200, 138, 60, 0.3);
+			margin-bottom: 1.1rem;
+			display: block;
+		}
+		.module .refdes {
+			font-family: var(--mono);
+			font-size: 0.66rem;
+			letter-spacing: 0.2em;
+			color: var(--copper);
+		}
+		.module h3 {
+			font-family: var(--heading);
+			font-weight: 600;
+			font-size: 1.05rem;
+			letter-spacing: 0.08em;
+			text-transform: uppercase;
+			margin: 0.35rem 0 0.5rem;
+		}
+		.module h3 a { color: var(--gold-bright); text-decoration: none; }
+		.module h3 a:hover { text-decoration: underline; }
+		.module p { font-size: 0.86rem; color: var(--silk-dim); }
+		.module .rev-list {
+			margin-top: 0.9rem;
+			padding-top: 0.9rem;
+			border-top: 1px dashed rgba(200, 138, 60, 0.35);
+			font-family: var(--mono);
+			font-size: 0.7rem;
+			letter-spacing: 0.14em;
+			text-transform: uppercase;
+			color: var(--copper);
+		}
+		.module .rev-list a {
+			color: var(--gold);
+			text-decoration: none;
+			border-bottom: 1px dotted var(--copper);
+			margin-right: 0.9rem;
+		}
+		.module .rev-list a:hover { color: var(--gold-bright); border-bottom-style: solid; }
+
+		/* ===== Footer ===== */
+		.actions { margin-top: 2rem; display: flex; flex-wrap: wrap; gap: 0.75rem; }
+		.gold-fingers {
+			margin: 3rem -3rem 0;
+			height: 46px;
+			background: repeating-linear-gradient(90deg,
+				var(--mask-edge) 0 10px,
+				var(--copper) 10px 14px,
+				var(--gold) 14px 30px,
+				var(--copper) 30px 34px,
+				var(--mask-edge) 34px 44px);
+			border-top: 2px solid var(--copper);
+		}
+		.footer-note {
+			text-align: center;
+			font-family: var(--mono);
+			font-size: 0.66rem;
+			letter-spacing: 0.2em;
+			color: var(--silk-dim);
+			padding: 1.5rem 0 0.5rem;
+			text-transform: uppercase;
+		}
+		.footer-note a { color: var(--copper); text-decoration: none; }
+		.footer-note a:hover { text-decoration: underline; }
+
+		@media screen and (max-width: 720px) {
+			body { padding: 1rem 0.5rem; }
+			.board { padding: 4rem 1.25rem 0; }
+			.board-legend { font-size: 0.58rem; letter-spacing: 0.14em; padding: 0 2.5rem; }
+			.hero .tagline { font-size: 0.72rem; letter-spacing: 0.1em; }
+			.gold-fingers { margin: 3rem -1.25rem 0; }
+			.sec-head { flex-wrap: wrap; }
+		}
+	</style>
+</head>
+<body>
+
+	<div class="board">
+		<span class="mount-hole tl"></span>
+		<span class="mount-hole tr"></span>
+		<span class="mount-hole bl"></span>
+		<span class="mount-hole br"></span>
+		<div class="board-legend">LKR-2026 &middot; BOM &middot; Project Index &middot; Rev B</div>
+
+		<!-- Hero -->
+		<header class="hero">
+			<div class="status-led"><span class="led"></span>ALL MODULES PLACED &mdash; AOI PASS</div>
+			<h1><span class="refdes">BOM &mdash; BILL OF MATERIALS</span>Projects</h1>
+			<p class="tagline">Every module on the board &mdash; hardware, firmware, mechanical, and industrial design</p>
+			<nav class="hero-nav">
+				<a class="pad-link" href="../index.html">&larr; Main Board</a>
+			</nav>
+		</header>
+
+		<!-- Modules -->
+		<section id="modules">
+			<div class="sec-head">
+				<span class="num">SHT 1/1</span>
+				<h2>Assembly Modules</h2>
+				<span class="rule"></span>
+			</div>
+			<p class="body-copy">Three modules are currently placed on the board. Each entry links to its full build log &mdash; schematics, CAD, bring-up, and field testing.</p>
+
+			<div class="module-grid">
+				<article class="module">
+					<span class="fiducial"></span>
+					<a href="tesseract_v1_2.html"><img src="images/tesseract/MkI/V1_displaying_starfield.jpg" alt="Tesseract 3D Display showing a starfield" /></a>
+					<span class="refdes">MOD.01</span>
+					<h3><a href="tesseract_v1_2.html">Tesseract 3D Display</a></h3>
+					<p>A volumetric 3D display built from custom GPU shard PCBs, a hand-fabricated chassis, and a whole lot of systems integration.</p>
+				</article>
+
+				<article class="module">
+					<span class="fiducial"></span>
+					<a href="psu_ui_2.html"><img src="images/psu_ui/case_cnc.jpg" alt="CNC-machined case for the Keithley 2304A UI upgrade" /></a>
+					<span class="refdes">MOD.02</span>
+					<h3><a href="psu_ui_2.html">Keithley 2304A UI Upgrade</a></h3>
+					<p>Modernized the interface of a 30-year-old precision power supply with custom PCB, embedded firmware, and a CNC-machined case.</p>
+				</article>
+
+				<article class="module">
+					<span class="fiducial"></span>
+					<a href="beacon_V3_2.html"><img src="images/beacon/beacon_assembled.jpg" alt="Assembled Celestial Navigator beacon" /></a>
+					<span class="refdes">MOD.03</span>
+					<h3><a href="beacon_V3_2.html">Celestial Navigator</a></h3>
+					<p>A handheld off-grid communicator iterated across three board revisions, from first prototype to a mass-producible handheld device.</p>
+					<div class="rev-list">
+						REV HISTORY:
+						<a href="beacon_V1_2.html">V1</a>
+						<a href="beacon_V2_2.html">V2</a>
+						<a href="beacon_V3_2.html">V3</a>
+					</div>
+				</article>
+			</div>
+
+			<div class="actions">
+				<a class="pad-link" href="../index.html">&larr; Main Board</a>
+				<a class="pad-link" href="../index.html#contact">Contact</a>
+			</div>
+			<p class="footer-note">&copy; 2026 Larry Kresse &middot; All rights reserved &middot; <a href="../index.html">LKR-2026 Rev B</a></p>
+			<div class="gold-fingers"></div>
+		</section>
+	</div>
+
+</body>
+</html>
