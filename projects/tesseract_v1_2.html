@@ -1,0 +1,413 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<title>Tesseract 3D Display - Larry Kresse (Rev B)</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta name="description" content="Tesseract 3D Display - a persistence-of-vision volumetric display by Larry Kresse" />
+	<meta name="keywords" content="Larry Kresse, Tesseract, volumetric display, persistence of vision, LED, engineering portfolio" />
+	<link rel="stylesheet" href="../assets/css/fontawesome-all.min.css" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:600,800&display=swap" />
+	<style>
+		:root {
+			--mask: #0D674E;
+			--mask-raised: #12745A;
+			--mask-edge: #08402F;
+			--copper: #c88a3c;
+			--gold: #d9b25f;
+			--gold-bright: #ecd9a0;
+			--silk: #e8e6df;
+			--silk-dim: #cfd4c9;
+			--led-green: #4cd964;
+			--mono: "Courier New", Courier, monospace;
+			--heading: "Raleway", Helvetica, sans-serif;
+		}
+		* { box-sizing: border-box; margin: 0; padding: 0; }
+		html { scroll-behavior: smooth; }
+		body {
+			background-color: var(--mask-edge);
+			background-image: radial-gradient(rgba(200, 138, 60, 0.13) 1px, transparent 1px);
+			background-size: 24px 24px;
+			color: var(--silk);
+			font-family: Helvetica, Arial, sans-serif;
+			font-size: 16px;
+			line-height: 1.7;
+			padding: 2rem 1rem;
+		}
+
+		/* ===== Board outline ===== */
+		.board {
+			position: relative;
+			max-width: 1060px;
+			margin: 0 auto;
+			background: var(--mask);
+			border: 2px solid var(--copper);
+			border-radius: 14px;
+			padding: 4.5rem 3rem 0;
+			overflow: hidden;
+		}
+		.mount-hole {
+			position: absolute;
+			width: 22px;
+			height: 22px;
+			border-radius: 50%;
+			background: var(--mask-edge);
+			border: 4px solid var(--gold);
+			z-index: 5;
+		}
+		.mount-hole.tl { top: 14px; left: 14px; }
+		.mount-hole.tr { top: 14px; right: 14px; }
+		.mount-hole.bl { bottom: 14px; left: 14px; }
+		.mount-hole.br { bottom: 14px; right: 14px; }
+		.board-legend {
+			position: absolute;
+			top: 1.1rem;
+			left: 0;
+			width: 100%;
+			text-align: center;
+			font-family: var(--mono);
+			font-size: 0.68rem;
+			letter-spacing: 0.25em;
+			color: var(--copper);
+			text-transform: uppercase;
+		}
+
+		/* ===== Hero ===== */
+		.hero {
+			padding: 3rem 0;
+			text-align: center;
+			border-bottom: 1px dashed rgba(200, 138, 60, 0.35);
+		}
+		.status-led {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.5rem;
+			font-family: var(--mono);
+			font-size: 0.7rem;
+			letter-spacing: 0.2em;
+			color: var(--silk-dim);
+			margin-bottom: 1.5rem;
+		}
+		.status-led .led {
+			width: 9px;
+			height: 9px;
+			border-radius: 50%;
+			background: var(--led-green);
+			animation: blink 2.4s infinite;
+		}
+		@keyframes blink {
+			0%, 100% { opacity: 1; }
+			50% { opacity: 0.25; }
+		}
+		.hero h1 {
+			font-family: var(--heading);
+			font-weight: 800;
+			font-size: clamp(2rem, 5vw, 3.2rem);
+			letter-spacing: 0.08em;
+			text-transform: uppercase;
+			color: var(--gold-bright);
+			line-height: 1.15;
+		}
+		.hero .refdes {
+			display: block;
+			font-family: var(--mono);
+			font-size: 0.75rem;
+			letter-spacing: 0.3em;
+			color: var(--copper);
+			margin-bottom: 0.75rem;
+		}
+		.hero .tagline {
+			max-width: 34rem;
+			margin: 1.25rem auto 0;
+			font-family: var(--heading);
+			font-weight: 600;
+			font-size: 0.82rem;
+			letter-spacing: 0.14em;
+			text-transform: uppercase;
+			color: var(--silk);
+		}
+		.hero-img {
+			display: block;
+			max-width: 640px;
+			width: 100%;
+			margin: 2.25rem auto 0;
+			border: 1px solid var(--copper);
+			border-radius: 5px;
+		}
+		.hero-nav {
+			margin-top: 2.25rem;
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+			gap: 0.75rem;
+		}
+		.pad-link {
+			font-family: var(--mono);
+			font-size: 0.78rem;
+			letter-spacing: 0.18em;
+			text-transform: uppercase;
+			text-decoration: none;
+			color: var(--gold);
+			border: 1px solid var(--copper);
+			border-radius: 3px;
+			padding: 0.55rem 1.3rem;
+			background: transparent;
+			transition: all 0.25s ease;
+		}
+		.pad-link:hover {
+			background: var(--gold);
+			border-color: var(--gold);
+			color: var(--mask);
+		}
+
+		/* ===== Sections ===== */
+		section { padding: 3.5rem 0; border-bottom: 1px dashed rgba(200, 138, 60, 0.35); }
+		section:last-of-type { border-bottom: none; }
+		.sec-head {
+			display: flex;
+			align-items: baseline;
+			gap: 1rem;
+			margin-bottom: 1.75rem;
+		}
+		.sec-head .num {
+			font-family: var(--mono);
+			font-size: 0.72rem;
+			letter-spacing: 0.2em;
+			color: var(--copper);
+			white-space: nowrap;
+		}
+		.sec-head h2 {
+			font-family: var(--heading);
+			font-weight: 800;
+			font-size: 1.5rem;
+			letter-spacing: 0.14em;
+			text-transform: uppercase;
+			color: var(--gold-bright);
+		}
+		.sec-head .rule {
+			flex: 1;
+			height: 1px;
+			background: repeating-linear-gradient(90deg, var(--copper) 0 8px, transparent 8px 14px);
+			align-self: center;
+		}
+		p.body-copy { max-width: 46rem; color: var(--silk); margin-bottom: 1rem; }
+		.body-copy a, .sub-section p a {
+			color: var(--gold);
+			text-decoration: none;
+			border-bottom: 1px dotted var(--copper);
+		}
+		.body-copy a:hover, .sub-section p a:hover { color: var(--gold-bright); border-bottom-style: solid; }
+		.body-copy strong, .sub-section p strong { color: var(--gold-bright); font-weight: 600; }
+
+		/* ===== Subsections (detail views) ===== */
+		.sub-section {
+			background: var(--mask-raised);
+			border: 1px solid rgba(200, 138, 60, 0.3);
+			border-radius: 5px;
+			padding: 1.75rem 1.6rem;
+			margin-top: 1.5rem;
+		}
+		.sub-section .det {
+			display: block;
+			font-family: var(--mono);
+			font-size: 0.66rem;
+			letter-spacing: 0.2em;
+			color: var(--copper);
+			text-transform: uppercase;
+			margin-bottom: 0.35rem;
+		}
+		.sub-section h3 {
+			font-family: var(--heading);
+			font-weight: 600;
+			font-size: 1.05rem;
+			letter-spacing: 0.1em;
+			text-transform: uppercase;
+			color: var(--gold-bright);
+			margin-bottom: 0.9rem;
+		}
+		.sub-section p {
+			max-width: 46rem;
+			font-size: 0.92rem;
+			color: var(--silk-dim);
+			margin-bottom: 0.9rem;
+		}
+		.sub-section p:last-of-type { margin-bottom: 0; }
+
+		/* ===== Galleries ===== */
+		.gallery-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+			gap: 1rem;
+			margin-top: 1.4rem;
+		}
+		.gallery-grid a {
+			position: relative;
+			display: block;
+			border: 1px solid rgba(200, 138, 60, 0.45);
+			border-radius: 4px;
+			overflow: hidden;
+			transition: all 0.25s ease;
+		}
+		.gallery-grid a:hover {
+			border-color: var(--gold);
+			transform: translateY(-4px);
+		}
+		.gallery-grid img {
+			display: block;
+			width: 100%;
+			height: 220px;
+			object-fit: cover;
+		}
+		.gallery-note {
+			font-family: var(--mono);
+			font-size: 0.64rem;
+			letter-spacing: 0.16em;
+			text-transform: uppercase;
+			color: var(--copper);
+			margin-top: 0.7rem;
+		}
+		.figure {
+			display: block;
+			max-width: 640px;
+			width: 100%;
+			margin: 1.5rem 0 0;
+			border: 1px solid var(--copper);
+			border-radius: 5px;
+		}
+
+		/* ===== Footer ===== */
+		.actions { margin-top: 2rem; display: flex; flex-wrap: wrap; gap: 0.75rem; }
+		.gold-fingers {
+			margin: 3rem -3rem 0;
+			height: 46px;
+			background: repeating-linear-gradient(90deg,
+				var(--mask-edge) 0 10px,
+				var(--copper) 10px 14px,
+				var(--gold) 14px 30px,
+				var(--copper) 30px 34px,
+				var(--mask-edge) 34px 44px);
+			border-top: 2px solid var(--copper);
+		}
+		.footer-note {
+			text-align: center;
+			font-family: var(--mono);
+			font-size: 0.66rem;
+			letter-spacing: 0.2em;
+			color: var(--silk-dim);
+			padding: 1.5rem 0 0.5rem;
+			text-transform: uppercase;
+		}
+		.footer-note a { color: var(--copper); text-decoration: none; }
+		.footer-note a:hover { text-decoration: underline; }
+
+		@media screen and (max-width: 720px) {
+			body { padding: 1rem 0.5rem; }
+			.board { padding: 4rem 1.25rem 0; }
+			.board-legend { font-size: 0.58rem; letter-spacing: 0.14em; padding: 0 2.5rem; }
+			.hero .tagline { font-size: 0.72rem; letter-spacing: 0.1em; }
+			.sub-section { padding: 1.4rem 1.1rem; }
+			.gold-fingers { margin: 3rem -1.25rem 0; }
+			.sec-head { flex-wrap: wrap; }
+		}
+	</style>
+</head>
+<body>
+
+	<div class="board">
+		<span class="mount-hole tl"></span>
+		<span class="mount-hole tr"></span>
+		<span class="mount-hole bl"></span>
+		<span class="mount-hole br"></span>
+		<div class="board-legend">LKR-2026 &middot; MOD.01 &middot; Tesseract 3D Display &middot; Rev B</div>
+
+		<!-- Hero -->
+		<header class="hero">
+			<div class="status-led"><span class="led"></span>SPINDLE OK &mdash; 100 LBS ROTATING</div>
+			<h1><span class="refdes">MOD.01 &mdash; VOLUMETRIC DISPLAY</span>Tesseract 3D Display</h1>
+			<p class="tagline">100 lbs of spinning electromechanical components make for an interesting volumetric display</p>
+			<img class="hero-img" src="images/tesseract/MkII/assembled-off.png" alt="Assembled Tesseract 3D display" />
+			<nav class="hero-nav">
+				<a class="pad-link" href="#background">Background</a>
+				<a class="pad-link" href="#first-steps">First Steps</a>
+				<a class="pad-link" href="../index2.html">&larr; Main Board</a>
+			</nav>
+		</header>
+
+		<!-- Background -->
+		<section id="background">
+			<div class="sec-head">
+				<span class="num">SHT 1/2</span>
+				<h2>Background</h2>
+				<span class="rule"></span>
+			</div>
+			<p class="body-copy">I've been interested in <strong><a href="https://en.wikipedia.org/wiki/Persistence_of_vision">Persistence-of-Vision</a>-based displays</strong> for years. You may be familiar with the LED fan displays used in advertising and other signage. They consist of an LED strip mounted on a fan blade. As the blade spins, the LEDs rapidly change color &mdash; resulting in an image being displayed in midair.</p>
+			<p class="body-copy">The appearance of these LED fan displays is similar to a sci-fi hologram, and most people agree that they look very cool. I wanted to build one, but I felt like this technology could use another dimension. So I began work on the Tesseract 3D display, which is essentially a stack of these 2D advertising displays.</p>
+			<img class="figure" src="images/tesseract/MkI/CAD_early_mockup.png" alt="Early CAD mockup of the Tesseract" />
+		</section>
+
+		<!-- First steps -->
+		<section id="first-steps">
+			<div class="sec-head">
+				<span class="num">SHT 2/2</span>
+				<h2>First Steps</h2>
+				<span class="rule"></span>
+			</div>
+			<p class="body-copy"><strong>The initial design</strong> was inspired by a cocktail arcade cabinet. Four joysticks and buttons allow four players to interact with a game running on the 3D display. A polycarbonate dome protects the users from the rapidly-spinning stack of LED blades.</p>
+			<p class="body-copy">An important step in constructing anything complicated is diagramming the <strong>functionality and system architecture</strong>. This helps me catch design oversights before I touch a CAD program or spare parts drawer.</p>
+
+			<article class="sub-section">
+				<span class="det">DET A &mdash; ARCHITECTURE</span>
+				<h3>General design</h3>
+				<p>The Tesseract has 2 main components: the spinning side and the static side. The spinning side contains the LEDs which are spun to create the visual effect of solid 3D images. The static side contains power supplies, controllers, and mechanical mounting components needed to power, control, and protect the spinning side.</p>
+				<p>Each LED blade consists of an <a href="https://www.espressif.com/en/products/socs/esp32-s3">ESP32-S3-based</a> embedded system and 180 RGB LEDs. The LED blades are controlled over SPI, and also accept a SYNC signal that is generated when the spinning side passes a "flag" on the static side.</p>
+				<p>A brushless motor and a <a href="https://vesc-project.com/">VESC controller</a> intended for electric bike applications provides the torque needed to spin up the display.</p>
+				<p>A custom slip ring transfers power between the static side and the spinning side via a set of graphite brushes.</p>
+				<p>Expecting the slip ring to be electrically noisy, I opted for a wireless control scheme for transmitting data from the static to spinning side.</p>
+				<div class="gallery-grid">
+					<a href="images/tesseract/MkI/tesseract-overview.png"><img src="images/tesseract/MkI/tesseract-overview.png" alt="Tesseract system overview" /></a>
+					<a href="images/tesseract/MkI/Tesseract-BlockDiagram.jpg"><img src="images/tesseract/MkI/Tesseract-BlockDiagram.jpg" alt="Tesseract block diagram" /></a>
+				</div>
+				<p class="gallery-note">Click any thumbnail to view the full image</p>
+			</article>
+
+			<article class="sub-section">
+				<span class="det">DET B &mdash; LED LAYOUT</span>
+				<h3>LED fan blade layout</h3>
+				<p>The initial arcade-inspired display mockup also included this LED fan blade layout: 12 stacks of blades are attached to a central axis.</p>
+				<p>This design provided some space between the LED blades, allowing LEDs in deeper parts of the display volume to be visible.</p>
+				<p>In practice, I didn't really like this design. The opaque LED blade PCBs would block too many of the LEDs from other spinning blades.</p>
+				<p>I used <a href="https://openscad.org/">OpenSCAD</a> to make a few animated mockups, showing what the LED fan stack would look like through a full rotation. Then, I picked a layout that seemed to provide a good viewing angle to all LED blade layers.</p>
+				<p>The yellow layout in the animation is what I settled on, and I am pretty happy with how the spiral layout preserves much of the viewing angles of LED strips deep in the display.</p>
+				<div class="gallery-grid">
+					<a href="images/tesseract/MkI/CAD_early_LED_layout.png"><img src="images/tesseract/MkI/CAD_early_LED_layout.png" alt="Early LED blade layout" /></a>
+					<a href="images/tesseract/MkI/CAD_Design_spiralsim.gif"><img src="images/tesseract/MkI/CAD_Design_spiralsim.gif" alt="Animated spiral layout simulation" /></a>
+				</div>
+			</article>
+
+			<article class="sub-section">
+				<span class="det">DET C &mdash; ENCLOSURE</span>
+				<h3>Dome sweet dome</h3>
+				<p>With the initial design figured out, I promptly ran into sourcing problems. In order for this to be remotely safe, a polycarbonate dome needs to cover the spinning LED blades.</p>
+				<p>And, a custom polycarbonate dome of the size I planned would cost nearly $1000. Acrylic is more common, cheaper, and more transparent, but often shatters under impact &mdash; not ideal for this use case!</p>
+				<p>I ended up finding a solution in an unlikely place: the old Cyclone arcade game. I bought a Cyclone machine from an arcade game warehouse, <a href="https://www.facebook.com/DaytonArcadesAndMore/">Dayton Arcades and More</a>.</p>
+				<p>That solved the dome sourcing issue, but now I had to redesign the device. Scaling up my arcade cabinet design to fit this massive dome would mean a huge cabinet, and I do need this to be movable for travel.</p>
+				<p>Combining the new spiral LED layout and new (to me) dome, I quickly designed a new circular cabinet, with weight-reducing speed holes. In the last image of this section's gallery, you can also see the slip ring mockup, planned motor placement, and twin LED fan blade supports. The body of the cabinet will be made out of 3/4" plywood, and is designed to slot together for easy assembly.</p>
+				<div class="gallery-grid">
+					<a href="images/tesseract/MkI/cyclone.jpg"><img src="images/tesseract/MkI/cyclone.jpg" alt="Cyclone arcade machine" /></a>
+					<a href="images/tesseract/MkI/tesseract_dome-cyclone.png"><img src="images/tesseract/MkI/tesseract_dome-cyclone.png" alt="Dome fitted to the Tesseract design" /></a>
+					<a href="images/tesseract/MkI/CAD_Design_V1_overview.png"><img src="images/tesseract/MkI/CAD_Design_V1_overview.png" alt="CAD design V1 overview" /></a>
+					<a href="images/tesseract/MkI/CAD_Design_V1_side.png"><img src="images/tesseract/MkI/CAD_Design_V1_side.png" alt="CAD design V1 side view" /></a>
+				</div>
+			</article>
+
+			<div class="actions">
+				<a class="pad-link" href="../index2.html">&larr; Main Board</a>
+				<a class="pad-link" href="tesseract_v1.html">View Rev A</a>
+			</div>
+			<p class="footer-note">&copy; 2026 Larry Kresse &middot; All rights reserved &middot; <a href="../index2.html">LKR-2026 Rev B</a></p>
+			<div class="gold-fingers"></div>
+		</section>
+	</div>
+
+</body>
+</html>
